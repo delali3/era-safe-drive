@@ -6,18 +6,195 @@ import {
   MapPin, Battery, Wifi, WifiOff, Heart, Thermometer,
   Calendar, MoreVertical, Eye, Edit, Trash2, RefreshCw,
   BarChart3, PieChart, LineChart, Zap, Star, Award,
-  Navigation, Phone, Mail, AlertCircle
+  Navigation, Phone, Mail, AlertCircle, Droplet,
+  Lock, EyeOff, ArrowRight, X
 } from 'lucide-react';
 
-// Header Component
-const Header = ({ activeTab, setActiveTab, searchTerm, setSearchTerm, handleRefresh, isRefreshing }) => {
+// Authentication Configuration
+const AUTH_CONFIG = {
+  users: [
+    { email: 'admin@erasafedrive.com', password: 'admin123', name: 'System Administrator', role: 'admin' },
+    { email: 'manager@erasafedrive.com', password: 'manager123', name: 'Fleet Manager', role: 'manager' },
+    { email: 'operator@erasafedrive.com', password: 'operator123', name: 'Fleet Operator', role: 'operator' }
+  ]
+};
+
+// ThingSpeak API Configuration
+const THINGSPEAK_CONFIG = {
+  channelId: '2942902', // Replace with your actual channel ID
+  readApiKey: 'PVPOUJUJB4TDZV91', // Replace with your actual read API key
+  baseUrl: 'https://api.thingspeak.com/channels'
+};
+
+// Login Component
+const LoginScreen = ({ onLogin }) => {
+  const [loginForm, setLoginForm] = useState({
+    email: '',
+    password: ''
+  });
+  const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setError('');
+
+    // Simulate API call delay
+    setTimeout(() => {
+      const user = AUTH_CONFIG.users.find(
+        u => u.email === loginForm.email && u.password === loginForm.password
+      );
+
+      if (user) {
+        onLogin(user);
+      } else {
+        setError('Invalid email or password');
+      }
+      setIsLoading(false);
+    }, 1000);
+  };
+
   return (
-    <header className="bg-gray-800/50 backdrop-blur-xl border-b border-gray-700/50 sticky top-0 z-40">
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+      <div className="w-full max-w-md">
+        {/* Logo */}
+        <div className="text-center mb-8">
+          <div className="flex items-center justify-center mb-4">
+            <div className="w-16 h-16 mr-3">
+              <div className="w-full h-full bg-green-600 rounded-full flex items-center justify-center relative overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-br from-green-500 to-green-700" />
+                <div className="relative">
+                  <div className="w-8 h-8 border-3 border-white rounded-full flex items-center justify-center">
+                    <div className="w-3 h-3 bg-white rounded-full" />
+                  </div>
+                  <div className="absolute -top-1 -right-1 w-4 h-4 bg-orange-500 rounded-full" />
+                  <div className="absolute -bottom-1 -left-1 w-4 h-4 bg-orange-500 rounded-full" />
+                </div>
+              </div>
+            </div>
+          </div>
+          <h1 className="text-3xl font-black text-green-600 mb-2">
+            ERA <span className="text-orange-500">SAFE</span>drive
+          </h1>
+          <p className="text-gray-600">Dashboard Access</p>
+        </div>
+
+        {/* Login Form */}
+        <div className="bg-white border border-gray-200 rounded-2xl p-8 shadow-lg">
+          <form onSubmit={handleLogin} className="space-y-6">
+            {error && (
+              <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
+                <div className="flex items-center space-x-2">
+                  <AlertCircle className="w-5 h-5 text-red-500" />
+                  <span className="text-red-700">{error}</span>
+                </div>
+              </div>
+            )}
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Email Address
+              </label>
+              <div className="relative">
+                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <input
+                  type="email"
+                  required
+                  value={loginForm.email}
+                  onChange={(e) => setLoginForm({...loginForm, email: e.target.value})}
+                  className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:border-green-500 focus:ring-2 focus:ring-green-500/20 transition-all duration-300 text-gray-900"
+                  placeholder="Enter your email"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Password
+              </label>
+              <div className="relative">
+                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <input
+                  type={showPassword ? "text" : "password"}
+                  required
+                  value={loginForm.password}
+                  onChange={(e) => setLoginForm({...loginForm, password: e.target.value})}
+                  className="w-full pl-12 pr-12 py-3 border border-gray-300 rounded-lg focus:border-green-500 focus:ring-2 focus:ring-green-500/20 transition-all duration-300 text-gray-900"
+                  placeholder="Enter your password"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                >
+                  {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                </button>
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="w-full bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-semibold py-3 px-4 rounded-lg transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+            >
+              {isLoading ? (
+                <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+              ) : (
+                <>
+                  Access Dashboard
+                  <ArrowRight className="ml-2 w-5 h-5" />
+                </>
+              )}
+            </button>
+          </form>
+
+          {/* Demo Credentials */}
+          <div className="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
+            <h4 className="font-medium text-blue-900 mb-2">Demo Credentials:</h4>
+            <div className="text-sm text-blue-700 space-y-1">
+              <div><strong>Admin:</strong> admin@erasafedrive.com / admin123</div>
+              <div><strong>Manager:</strong> manager@erasafedrive.com / manager123</div>
+              <div><strong>Operator:</strong> operator@erasafedrive.com / operator123</div>
+            </div>
+          </div>
+        </div>
+
+        {/* Footer */}
+        <div className="text-center mt-8">
+          <p className="text-sm text-gray-500">
+            &copy; 2025 EraSafeDrive. All rights reserved.
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Header Component
+const Header = ({ activeTab, setActiveTab, searchTerm, setSearchTerm, handleRefresh, isRefreshing, user, onLogout }) => {
+  return (
+    <header className="bg-white border-b border-gray-200 sticky top-0 z-40 shadow-sm">
       <div className="flex items-center justify-between px-6 py-4">
         <div className="flex items-center space-x-6">
-          <h1 className="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
-            EraSafeDrive
-          </h1>
+          <div className="flex items-center">
+            <div className="w-10 h-10 mr-3">
+              <div className="w-full h-full bg-green-600 rounded-full flex items-center justify-center relative overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-br from-green-500 to-green-700" />
+                <div className="relative">
+                  <div className="w-5 h-5 border-2 border-white rounded-full flex items-center justify-center">
+                    <div className="w-1.5 h-1.5 bg-white rounded-full" />
+                  </div>
+                  <div className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-orange-500 rounded-full" />
+                  <div className="absolute -bottom-0.5 -left-0.5 w-2.5 h-2.5 bg-orange-500 rounded-full" />
+                </div>
+              </div>
+            </div>
+            <h1 className="text-xl font-black text-green-600">
+              ERA <span className="text-orange-500">SAFE</span>drive
+            </h1>
+          </div>
           <nav className="hidden md:flex space-x-1">
             {['overview', 'vehicles', 'drivers', 'reports', 'alerts'].map((tab) => (
               <button
@@ -25,8 +202,8 @@ const Header = ({ activeTab, setActiveTab, searchTerm, setSearchTerm, handleRefr
                 onClick={() => setActiveTab(tab)}
                 className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 ${
                   activeTab === tab
-                    ? 'bg-cyan-500/20 text-cyan-400'
-                    : 'text-gray-400 hover:text-white hover:bg-gray-700/50'
+                    ? 'bg-green-50 text-green-600'
+                    : 'text-gray-600 hover:text-green-600 hover:bg-green-50'
                 }`}
               >
                 {tab.charAt(0).toUpperCase() + tab.slice(1)}
@@ -44,30 +221,48 @@ const Header = ({ activeTab, setActiveTab, searchTerm, setSearchTerm, handleRefr
               placeholder="Search..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10 pr-4 py-2 bg-gray-700/50 border border-gray-600/50 rounded-lg focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/20 transition-all duration-300 text-white placeholder-gray-400"
+              className="pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:border-green-500 focus:ring-2 focus:ring-green-500/20 transition-all duration-300 text-gray-900 placeholder-gray-400"
             />
           </div>
 
           {/* Notifications */}
-          <button className="relative p-2 rounded-lg bg-gray-700/50 hover:bg-gray-600/50 transition-colors duration-300">
-            <Bell className="w-5 h-5" />
+          <button className="relative p-2 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors duration-300">
+            <Bell className="w-5 h-5 text-gray-600" />
             <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></span>
           </button>
 
           {/* Refresh */}
           <button
             onClick={handleRefresh}
-            className="p-2 rounded-lg bg-gray-700/50 hover:bg-gray-600/50 transition-colors duration-300"
+            className="p-2 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors duration-300"
           >
-            <RefreshCw className={`w-5 h-5 ${isRefreshing ? 'animate-spin' : ''}`} />
+            <RefreshCw className={`w-5 h-5 text-gray-600 ${isRefreshing ? 'animate-spin' : ''}`} />
           </button>
 
           {/* Profile */}
-          <div className="relative">
-            <button className="flex items-center space-x-2 p-2 rounded-lg bg-gray-700/50 hover:bg-gray-600/50 transition-colors duration-300">
-              <User className="w-5 h-5" />
-              <span className="hidden md:block">Admin</span>
+          <div className="relative group">
+            <button className="flex items-center space-x-2 p-2 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors duration-300">
+              <User className="w-5 h-5 text-gray-600" />
+              <span className="hidden md:block text-gray-700">{user.name}</span>
             </button>
+            
+            {/* Dropdown Menu */}
+            <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
+              <div className="p-3 border-b border-gray-200">
+                <div className="text-sm font-medium text-gray-900">{user.name}</div>
+                <div className="text-xs text-gray-500">{user.email}</div>
+                <div className="text-xs text-green-600 capitalize">{user.role}</div>
+              </div>
+              <div className="p-1">
+                <button
+                  onClick={onLogout}
+                  className="flex items-center space-x-2 w-full px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg transition-colors duration-300"
+                >
+                  <LogOut className="w-4 h-4" />
+                  <span>Sign Out</span>
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -76,17 +271,50 @@ const Header = ({ activeTab, setActiveTab, searchTerm, setSearchTerm, handleRefr
 };
 
 // Stats Card Component
-const StatsCard = ({ icon: Icon, title, value, trend: TrendIcon, color }) => {
+const StatsCard = ({ icon: Icon, title, value, trend: TrendIcon, color, isLoading }) => {
   return (
-    <div className="bg-gradient-to-br from-gray-800 to-gray-900 p-6 rounded-2xl border border-gray-700/50">
+    <div className="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
       <div className="flex items-center justify-between mb-4">
-        <div className={`p-3 bg-${color}-500/20 rounded-xl`}>
-          <Icon className={`w-6 h-6 text-${color}-400`} />
+        <div className={`p-3 bg-${color}-50 rounded-xl`}>
+          <Icon className={`w-6 h-6 text-${color}-600`} />
         </div>
-        <TrendIcon className={`w-5 h-5 ${TrendIcon === TrendingUp ? 'text-green-400' : 'text-red-400'}`} />
+        <TrendIcon className={`w-5 h-5 ${TrendIcon === TrendingUp ? 'text-green-500' : 'text-red-500'}`} />
       </div>
-      <div className="text-2xl font-bold text-white">{value}</div>
-      <div className="text-sm text-gray-400">{title}</div>
+      {isLoading ? (
+        <div className="animate-pulse">
+          <div className="h-8 bg-gray-200 rounded mb-2"></div>
+          <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+        </div>
+      ) : (
+        <>
+          <div className="text-2xl font-bold text-gray-900">{value}</div>
+          <div className="text-sm text-gray-600">{title}</div>
+        </>
+      )}
+    </div>
+  );
+};
+
+// Live Data Card Component
+const LiveDataCard = ({ icon: Icon, title, value, unit, status, color }) => {
+  return (
+    <div className="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
+      <div className="flex items-center justify-between mb-4">
+        <div className={`p-3 bg-${color}-50 rounded-xl`}>
+          <Icon className={`w-6 h-6 text-${color}-600`} />
+        </div>
+        <div className={`px-2 py-1 rounded-full text-xs font-medium ${
+          status === 'normal' ? 'bg-green-100 text-green-800' :
+          status === 'warning' ? 'bg-yellow-100 text-yellow-800' :
+          'bg-red-100 text-red-800'
+        }`}>
+          {status}
+        </div>
+      </div>
+      <div className="text-2xl font-bold text-gray-900">
+        {value} <span className="text-sm text-gray-500">{unit}</span>
+      </div>
+      <div className="text-sm text-gray-600">{title}</div>
     </div>
   );
 };
@@ -94,9 +322,9 @@ const StatsCard = ({ icon: Icon, title, value, trend: TrendIcon, color }) => {
 // Chart Card Component
 const ChartCard = ({ title, children, actions }) => {
   return (
-    <div className="bg-gradient-to-br from-gray-800 to-gray-900 p-6 rounded-2xl border border-gray-700/50">
+    <div className="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
       <div className="flex items-center justify-between mb-6">
-        <h3 className="text-lg font-semibold text-white">{title}</h3>
+        <h3 className="text-lg font-semibold text-gray-900">{title}</h3>
         {actions}
       </div>
       <div className="h-64 flex items-center justify-center">
@@ -106,33 +334,15 @@ const ChartCard = ({ title, children, actions }) => {
   );
 };
 
-// Activity Item Component
-const ActivityItem = ({ activity, getAlertIcon, getStatusColor }) => {
-  return (
-    <div className="flex items-center space-x-4 p-4 bg-gray-700/30 rounded-xl">
-      <div className="flex-shrink-0">
-        {getAlertIcon(activity.type)}
-      </div>
-      <div className="flex-1">
-        <div className="text-white font-medium">{activity.driver}</div>
-        <div className="text-sm text-gray-400">{activity.vehicle} • {activity.time}</div>
-      </div>
-      <div className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(activity.status)}`}>
-        {activity.status}
-      </div>
-    </div>
-  );
-};
-
 // Vehicle Row Component
-const VehicleRow = ({ vehicle, getStatusColor }) => {
+const VehicleRow = ({ vehicle, getStatusColor, onViewVehicle, onEditVehicle, onShowMoreOptions }) => {
   return (
-    <tr className="hover:bg-gray-700/30 transition-colors duration-300">
+    <tr className="hover:bg-gray-50 transition-colors duration-300">
       <td className="px-6 py-4">
-        <div className="font-medium text-white">{vehicle.id}</div>
+        <div className="font-medium text-gray-900">{vehicle.id}</div>
       </td>
       <td className="px-6 py-4">
-        <div className="text-white">{vehicle.driver}</div>
+        <div className="text-gray-900">{vehicle.driver}</div>
       </td>
       <td className="px-6 py-4">
         <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(vehicle.status)}`}>
@@ -142,38 +352,50 @@ const VehicleRow = ({ vehicle, getStatusColor }) => {
       <td className="px-6 py-4">
         <div className="flex items-center space-x-2">
           <MapPin className="w-4 h-4 text-gray-400" />
-          <span className="text-gray-300">{vehicle.location}</span>
+          <span className="text-gray-700">{vehicle.location}</span>
         </div>
       </td>
       <td className="px-6 py-4">
-        <div className="flex items-center space-x-2">
-          <Battery className="w-4 h-4 text-green-400" />
-          <span className="text-white">{vehicle.battery}%</span>
-        </div>
+        <div className="text-gray-700">{vehicle.longitude}, {vehicle.latitude}</div>
       </td>
       <td className="px-6 py-4">
-        <div className="text-gray-300">{vehicle.lastCheck}</div>
+        <div className="text-gray-700">{vehicle.bloodPressure} mmHg</div>
+      </td>
+      <td className="px-6 py-4">
+        <div className="text-gray-700">{vehicle.alcoholLevel}%</div>
       </td>
       <td className="px-6 py-4">
         {vehicle.alerts > 0 ? (
           <div className="flex items-center space-x-1">
-            <AlertTriangle className="w-4 h-4 text-red-400" />
-            <span className="text-red-400">{vehicle.alerts}</span>
+            <AlertTriangle className="w-4 h-4 text-red-500" />
+            <span className="text-red-500">{vehicle.alerts}</span>
           </div>
         ) : (
-          <CheckCircle className="w-4 h-4 text-green-400" />
+          <CheckCircle className="w-4 h-4 text-green-500" />
         )}
       </td>
       <td className="px-6 py-4">
         <div className="flex items-center space-x-2">
-          <button className="p-2 rounded-lg bg-gray-700/50 hover:bg-gray-600/50 transition-colors duration-300">
-            <Eye className="w-4 h-4" />
+          <button 
+            onClick={() => onViewVehicle(vehicle)}
+            className="p-2 rounded-lg bg-gray-50 hover:bg-blue-50 hover:text-blue-600 transition-colors duration-300"
+            title="View Details"
+          >
+            <Eye className="w-4 h-4 text-gray-600" />
           </button>
-          <button className="p-2 rounded-lg bg-gray-700/50 hover:bg-gray-600/50 transition-colors duration-300">
-            <Edit className="w-4 h-4" />
+          <button 
+            onClick={() => onEditVehicle(vehicle)}
+            className="p-2 rounded-lg bg-gray-50 hover:bg-green-50 hover:text-green-600 transition-colors duration-300"
+            title="Edit Vehicle"
+          >
+            <Edit className="w-4 h-4 text-gray-600" />
           </button>
-          <button className="p-2 rounded-lg bg-gray-700/50 hover:bg-gray-600/50 transition-colors duration-300">
-            <MoreVertical className="w-4 h-4" />
+          <button 
+            onClick={() => onShowMoreOptions(vehicle)}
+            className="p-2 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors duration-300"
+            title="More Options"
+          >
+            <MoreVertical className="w-4 h-4 text-gray-600" />
           </button>
         </div>
       </td>
@@ -181,229 +403,249 @@ const VehicleRow = ({ vehicle, getStatusColor }) => {
   );
 };
 
-// Driver Card Component
-const DriverCard = ({ driver, getStatusColor }) => {
-  return (
-    <div className="bg-gradient-to-br from-gray-800 to-gray-900 p-6 rounded-2xl border border-gray-700/50">
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center space-x-3">
-          <div className="w-12 h-12 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-full flex items-center justify-center">
-            <User className="w-6 h-6 text-white" />
-          </div>
-          <div>
-            <div className="font-semibold text-white">{driver.name}</div>
-            <div className={`text-xs px-2 py-1 rounded-full ${getStatusColor(driver.status)}`}>
-              {driver.status}
-            </div>
-          </div>
-        </div>
-        <button className="p-2 rounded-lg bg-gray-700/50 hover:bg-gray-600/50 transition-colors duration-300">
-          <MoreVertical className="w-4 h-4" />
-        </button>
-      </div>
-
-      <div className="space-y-3">
-        <div className="flex items-center justify-between">
-          <span className="text-gray-400">Safety Score</span>
-          <div className="flex items-center space-x-2">
-            <div className="w-16 h-2 bg-gray-700 rounded-full overflow-hidden">
-              <div 
-                className="h-full bg-gradient-to-r from-green-400 to-cyan-400 transition-all duration-500"
-                style={{ width: `${driver.safetyScore}%` }}
-              ></div>
-            </div>
-            <span className="text-white font-medium">{driver.safetyScore}%</span>
-          </div>
-        </div>
-
-        <div className="flex items-center justify-between">
-          <span className="text-gray-400">Total Trips</span>
-          <span className="text-white font-medium">{driver.trips}</span>
-        </div>
-
-        <div className="flex items-center justify-between">
-          <span className="text-gray-400">Violations</span>
-          <span className={`font-medium ${driver.violations === 0 ? 'text-green-400' : 'text-red-400'}`}>
-            {driver.violations}
-          </span>
-        </div>
-
-        <div className="flex items-center justify-between">
-          <span className="text-gray-400">Last Active</span>
-          <span className="text-white">{driver.lastActive}</span>
-        </div>
-      </div>
-
-      <div className="flex items-center space-x-2 mt-4 pt-4 border-t border-gray-700/50">
-        <button className="flex-1 py-2 px-3 bg-cyan-500/20 text-cyan-400 rounded-lg hover:bg-cyan-500/30 transition-colors duration-300">
-          View Details
-        </button>
-        <button className="p-2 rounded-lg bg-gray-700/50 hover:bg-gray-600/50 transition-colors duration-300">
-          <Phone className="w-4 h-4" />
-        </button>
-        <button className="p-2 rounded-lg bg-gray-700/50 hover:bg-gray-600/50 transition-colors duration-300">
-          <Mail className="w-4 h-4" />
-        </button>
-      </div>
-    </div>
-  );
-};
-
-// Alert Item Component
-const AlertItem = ({ alert }) => {
-  return (
-    <div className="flex items-start space-x-4 p-4 bg-gray-700/30 rounded-xl">
-      <div className="flex-shrink-0 mt-1">
-        {alert.type === 'critical' && <AlertTriangle className="w-5 h-5 text-red-400" />}
-        {alert.type === 'warning' && <AlertCircle className="w-5 h-5 text-yellow-400" />}
-        {alert.type === 'info' && <Bell className="w-5 h-5 text-blue-400" />}
-      </div>
-      <div className="flex-1">
-        <div className="flex items-center space-x-2 mb-2">
-          <h4 className="font-medium text-white">{alert.title}</h4>
-          <span className="text-xs text-gray-400">• {alert.vehicle}</span>
-        </div>
-        <p className="text-sm text-gray-300 mb-2">{alert.description}</p>
-        <div className="text-xs text-gray-400">{alert.time}</div>
-      </div>
-      <div className="flex items-center space-x-2">
-        <button className="p-2 rounded-lg bg-gray-600/50 hover:bg-gray-500/50 transition-colors duration-300">
-          <Eye className="w-4 h-4 text-gray-400" />
-        </button>
-        <button className="p-2 rounded-lg bg-green-500/20 hover:bg-green-500/30 transition-colors duration-300">
-          <CheckCircle className="w-4 h-4 text-green-400" />
-        </button>
-        <button className="p-2 rounded-lg bg-red-500/20 hover:bg-red-500/30 transition-colors duration-300">
-          <XCircle className="w-4 h-4 text-red-400" />
-        </button>
-      </div>
-    </div>
-  );
-};
-
-// Report Card Component
-const ReportCard = ({ icon: Icon, title, description, color, onGenerate }) => {
-  return (
-    <div className="bg-gradient-to-br from-gray-800 to-gray-900 p-6 rounded-2xl border border-gray-700/50">
-      <div className="flex items-center space-x-3 mb-4">
-        <div className={`p-3 bg-${color}-500/20 rounded-xl`}>
-          <Icon className={`w-6 h-6 text-${color}-400`} />
-        </div>
-        <div>
-          <h3 className="font-semibold text-white">{title}</h3>
-          <p className="text-sm text-gray-400">{description}</p>
-        </div>
-      </div>
-      <button 
-        onClick={onGenerate}
-        className={`w-full py-2 px-4 bg-${color}-500/20 text-${color}-400 rounded-lg hover:bg-${color}-500/30 transition-colors duration-300`}
-      >
-        Generate Report
-      </button>
-    </div>
-  );
-};
-
 // Main Dashboard Component
 const Dashboard = () => {
+  // Authentication state
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [currentUser, setCurrentUser] = useState(null);
+  
+  // Dashboard state
   const [activeTab, setActiveTab] = useState('overview');
   const [selectedTimeRange, setSelectedTimeRange] = useState('24h');
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
+  const [thingSpeakData, setThingSpeakData] = useState({
+    longitude: null,
+    latitude: null,
+    bloodPressure: null,
+    alcoholLevel: null,
+    lastUpdate: null
+  });
+  const [isLoadingData, setIsLoadingData] = useState(false);
 
-  // Sample data
+  // Vehicle management modals
+  const [showViewModal, setShowViewModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [showMoreOptionsModal, setShowMoreOptionsModal] = useState(false);
+  const [selectedVehicle, setSelectedVehicle] = useState(null);
+
+  // Check for existing authentication on component mount
+  useEffect(() => {
+    const savedUser = localStorage.getItem('erasafeDriveUser');
+    if (savedUser) {
+      try {
+        const user = JSON.parse(savedUser);
+        setCurrentUser(user);
+        setIsAuthenticated(true);
+      } catch (error) {
+        localStorage.removeItem('erasafeDriveUser');
+      }
+    }
+  }, []);
+
+  // Authentication handlers
+  const handleLogin = (user) => {
+    setCurrentUser(user);
+    setIsAuthenticated(true);
+    localStorage.setItem('erasafeDriveUser', JSON.stringify(user));
+  };
+
+  const handleLogout = () => {
+    setCurrentUser(null);
+    setIsAuthenticated(false);
+    localStorage.removeItem('erasafeDriveUser');
+    setActiveTab('overview'); // Reset to overview tab
+  };
+
+  // Fetch data from ThingSpeak
+  const fetchThingSpeakData = async () => {
+    setIsLoadingData(true);
+    try {
+      // Fetch latest data from ThingSpeak
+      const response = await fetch(
+        `${THINGSPEAK_CONFIG.baseUrl}/${THINGSPEAK_CONFIG.channelId}/feeds.json?api_key=${THINGSPEAK_CONFIG.readApiKey}&results=1`
+      );
+      
+      if (response.ok) {
+        const data = await response.json();
+        const feeds = data.feeds;
+        
+        if (feeds && feeds.length > 0) {
+          const latestFeed = feeds[0];
+          setThingSpeakData({
+            longitude: parseFloat(latestFeed.field1) || 0,
+            latitude: parseFloat(latestFeed.field2) || 0,
+            bloodPressure: parseFloat(latestFeed.field3) || 0,
+            alcoholLevel: parseFloat(latestFeed.field4) || 0,
+            lastUpdate: new Date(latestFeed.created_at)
+          });
+        }
+      } else {
+        console.error('Failed to fetch ThingSpeak data');
+        // Use sample data for demo
+        setThingSpeakData({
+          longitude: -0.1278,
+          latitude: 51.5074,
+          bloodPressure: 120,
+          alcoholLevel: 0.02,
+          lastUpdate: new Date()
+        });
+      }
+    } catch (error) {
+      console.error('Error fetching ThingSpeak data:', error);
+      // Use sample data for demo
+      setThingSpeakData({
+        longitude: -0.1278,
+        latitude: 51.5074,
+        bloodPressure: 120,
+        alcoholLevel: 0.02,
+        lastUpdate: new Date()
+      });
+    }
+    setIsLoadingData(false);
+  };
+
+  // Auto-refresh data every 30 seconds - only when authenticated
+  useEffect(() => {
+    if (isAuthenticated) {
+      fetchThingSpeakData();
+      const interval = setInterval(fetchThingSpeakData, 30000);
+      return () => clearInterval(interval);
+    }
+  }, [isAuthenticated]);
+
+  const handleRefresh = () => {
+    setIsRefreshing(true);
+    fetchThingSpeakData();
+    setTimeout(() => setIsRefreshing(false), 2000);
+  };
+
+  // Vehicle action handlers
+  const handleViewVehicle = (vehicle) => {
+    setSelectedVehicle(vehicle);
+    setShowViewModal(true);
+  };
+
+  const handleEditVehicle = (vehicle) => {
+    setSelectedVehicle(vehicle);
+    setShowEditModal(true);
+  };
+
+  const handleMoreOptions = (vehicle) => {
+    setSelectedVehicle(vehicle);
+    setShowMoreOptionsModal(true);
+  };
+
+  const handleExportReport = () => {
+    // Create CSV content
+    const headers = ['Vehicle ID', 'Driver', 'Status', 'Location', 'Longitude', 'Latitude', 'Blood Pressure', 'Alcohol Level', 'Alerts'];
+    const csvContent = [
+      headers.join(','),
+      ...dashboardData.vehicles.map(vehicle => [
+        vehicle.id,
+        vehicle.driver,
+        vehicle.status,
+        vehicle.location,
+        vehicle.longitude,
+        vehicle.latitude,
+        vehicle.bloodPressure,
+        vehicle.alcoholLevel,
+        vehicle.alerts
+      ].join(','))
+    ].join('\n');
+
+    // Create and download file
+    const blob = new Blob([csvContent], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `vehicle-report-${new Date().toISOString().split('T')[0]}.csv`;
+    a.click();
+    window.URL.revokeObjectURL(url);
+  };
+
+  // Show login screen if not authenticated
+  if (!isAuthenticated) {
+    return <LoginScreen onLogin={handleLogin} />;
+  }
+
+  const getStatusColor = (status) => {
+    switch (status) {
+      case 'active': return 'text-green-700 bg-green-100';
+      case 'inactive': return 'text-gray-700 bg-gray-100';
+      case 'maintenance': return 'text-orange-700 bg-orange-100';
+      case 'violation': return 'text-red-700 bg-red-100';
+      case 'training': return 'text-blue-700 bg-blue-100';
+      default: return 'text-gray-700 bg-gray-100';
+    }
+  };
+
+  const getHealthStatus = (value, type) => {
+    switch (type) {
+      case 'bloodPressure':
+        if (value > 140) return 'critical';
+        if (value > 120) return 'warning';
+        return 'normal';
+      case 'alcoholLevel':
+        if (value > 0.08) return 'critical';
+        if (value > 0.05) return 'warning';
+        return 'normal';
+      default:
+        return 'normal';
+    }
+  };
+
+  // Sample enhanced data with ThingSpeak integration
   const dashboardData = {
     overview: {
       totalVehicles: 127,
       activeDrivers: 89,
-      incidents: 3,
-      safetyScore: 94.2,
-      alerts: 12
+      incidents: thingSpeakData.alcoholLevel > 0.05 ? 1 : 0,
+      safetyScore: thingSpeakData.alcoholLevel > 0.05 ? 87.2 : 94.2,
+      alerts: thingSpeakData.bloodPressure > 140 || thingSpeakData.alcoholLevel > 0.05 ? 3 : 1
     },
-    recentActivity: [
-      { id: 1, type: 'violation', driver: 'John Smith', vehicle: 'VH-001', time: '2 mins ago', status: 'resolved' },
-      { id: 2, type: 'maintenance', driver: 'Sarah Johnson', vehicle: 'VH-023', time: '15 mins ago', status: 'pending' },
-      { id: 3, type: 'alert', driver: 'Mike Chen', vehicle: 'VH-045', time: '1 hour ago', status: 'investigating' },
-      { id: 4, type: 'success', driver: 'Lisa Wang', vehicle: 'VH-012', time: '2 hours ago', status: 'completed' }
-    ],
     vehicles: [
-      { id: 'VH-001', driver: 'John Smith', status: 'active', location: 'Downtown', battery: 85, lastCheck: '2 mins ago', alerts: 0 },
-      { id: 'VH-002', driver: 'Sarah Johnson', status: 'inactive', location: 'Airport', battery: 92, lastCheck: '1 hour ago', alerts: 1 },
-      { id: 'VH-003', driver: 'Mike Chen', status: 'maintenance', location: 'Service Center', battery: 45, lastCheck: '3 hours ago', alerts: 2 },
-      { id: 'VH-004', driver: 'Lisa Wang', status: 'active', location: 'Industrial Zone', battery: 78, lastCheck: '5 mins ago', alerts: 0 },
-      { id: 'VH-005', driver: 'Tom Brown', status: 'active', location: 'City Center', battery: 88, lastCheck: '1 min ago', alerts: 0 }
-    ],
-    drivers: [
-      { id: 1, name: 'John Smith', status: 'active', safetyScore: 96, trips: 245, violations: 1, lastActive: '2 mins ago' },
-      { id: 2, name: 'Sarah Johnson', status: 'inactive', safetyScore: 92, trips: 189, violations: 2, lastActive: '1 hour ago' },
-      { id: 3, name: 'Mike Chen', status: 'training', safetyScore: 88, trips: 156, violations: 3, lastActive: '3 hours ago' },
-      { id: 4, name: 'Lisa Wang', status: 'active', safetyScore: 98, trips: 278, violations: 0, lastActive: '5 mins ago' },
-      { id: 5, name: 'Tom Brown', status: 'active', safetyScore: 94, trips: 203, violations: 1, lastActive: '1 min ago' }
-    ],
-    alerts: [
       { 
-        id: 1, 
-        type: 'critical', 
-        title: 'Alcohol Detection Violation', 
-        description: 'Driver John Smith failed breathalyzer test in vehicle VH-001',
-        time: '2 minutes ago',
-        vehicle: 'VH-001'
+        id: 'VH-001', 
+        driver: 'John Smith', 
+        status: thingSpeakData.alcoholLevel > 0.05 ? 'violation' : 'active', 
+        location: 'Downtown',
+        longitude: thingSpeakData.longitude?.toFixed(4) || '0.0000',
+        latitude: thingSpeakData.latitude?.toFixed(4) || '0.0000',
+        bloodPressure: thingSpeakData.bloodPressure || 0,
+        alcoholLevel: thingSpeakData.alcoholLevel || 0,
+        lastCheck: '2 mins ago', 
+        alerts: thingSpeakData.alcoholLevel > 0.05 || thingSpeakData.bloodPressure > 140 ? 1 : 0 
       },
       { 
-        id: 2, 
-        type: 'warning', 
-        title: 'High Heart Rate Detected', 
-        description: 'Driver Sarah Johnson showing elevated heart rate (120 BPM)',
-        time: '15 minutes ago',
-        vehicle: 'VH-023'
+        id: 'VH-002', 
+        driver: 'Sarah Johnson', 
+        status: 'active', 
+        location: 'Airport',
+        longitude: '-0.4614',
+        latitude: '51.4700',
+        bloodPressure: 118,
+        alcoholLevel: 0.00,
+        lastCheck: '1 hour ago', 
+        alerts: 0 
       },
       { 
-        id: 3, 
-        type: 'info', 
-        title: 'Scheduled Maintenance Due', 
-        description: 'Vehicle VH-045 requires routine safety system check',
-        time: '1 hour ago',
-        vehicle: 'VH-045'
-      },
-      { 
-        id: 4, 
-        type: 'warning', 
-        title: 'Low Battery Warning', 
-        description: 'Vehicle VH-003 battery level at 45% - charging recommended',
-        time: '3 hours ago',
-        vehicle: 'VH-003'
+        id: 'VH-003', 
+        driver: 'Mike Chen', 
+        status: 'maintenance', 
+        location: 'Service Center',
+        longitude: '-0.0759',
+        latitude: '51.5074',
+        bloodPressure: 125,
+        alcoholLevel: 0.01,
+        lastCheck: '3 hours ago', 
+        alerts: 0 
       }
     ]
   };
 
-  const handleRefresh = () => {
-    setIsRefreshing(true);
-    setTimeout(() => setIsRefreshing(false), 2000);
-  };
-
-  const getStatusColor = (status) => {
-    switch (status) {
-      case 'active': return 'text-green-400 bg-green-400/10';
-      case 'inactive': return 'text-gray-400 bg-gray-400/10';
-      case 'maintenance': return 'text-orange-400 bg-orange-400/10';
-      case 'violation': return 'text-red-400 bg-red-400/10';
-      case 'training': return 'text-blue-400 bg-blue-400/10';
-      default: return 'text-gray-400 bg-gray-400/10';
-    }
-  };
-
-  const getAlertIcon = (type) => {
-    switch (type) {
-      case 'violation': return <AlertTriangle className="w-4 h-4 text-red-400" />;
-      case 'maintenance': return <Settings className="w-4 h-4 text-orange-400" />;
-      case 'alert': return <AlertCircle className="w-4 h-4 text-yellow-400" />;
-      case 'success': return <CheckCircle className="w-4 h-4 text-green-400" />;
-      default: return <Clock className="w-4 h-4 text-gray-400" />;
-    }
-  };
-
   return (
-    <div className="min-h-screen bg-gray-900 text-white">
+    <div className="min-h-screen bg-gray-50 text-gray-900">
       <Header 
         activeTab={activeTab}
         setActiveTab={setActiveTab}
@@ -411,12 +653,62 @@ const Dashboard = () => {
         setSearchTerm={setSearchTerm}
         handleRefresh={handleRefresh}
         isRefreshing={isRefreshing}
+        user={currentUser}
+        onLogout={handleLogout}
       />
 
       <main className="p-6 space-y-6">
         {/* Overview Tab */}
         {activeTab === 'overview' && (
           <div className="space-y-6">
+            {/* Live ThingSpeak Data */}
+            <div className="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-lg font-semibold text-gray-900">Live ThingSpeak Data</h3>
+                <div className="flex items-center space-x-2">
+                  <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                  <span className="text-sm text-gray-600">
+                    Last updated: {thingSpeakData.lastUpdate?.toLocaleTimeString() || 'Never'}
+                  </span>
+                </div>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <LiveDataCard
+                  icon={Navigation}
+                  title="Longitude"
+                  value={thingSpeakData.longitude?.toFixed(4) || '0.0000'}
+                  unit="°"
+                  status="normal"
+                  color="blue"
+                />
+                <LiveDataCard
+                  icon={MapPin}
+                  title="Latitude"
+                  value={thingSpeakData.latitude?.toFixed(4) || '0.0000'}
+                  unit="°"
+                  status="normal"
+                  color="green"
+                />
+                <LiveDataCard
+                  icon={Heart}
+                  title="Blood Pressure"
+                  value={thingSpeakData.bloodPressure || '0'}
+                  unit="mmHg"
+                  status={getHealthStatus(thingSpeakData.bloodPressure, 'bloodPressure')}
+                  color="red"
+                />
+                <LiveDataCard
+                  icon={Droplet}
+                  title="Alcohol Level"
+                  value={thingSpeakData.alcoholLevel?.toFixed(3) || '0.000'}
+                  unit="%"
+                  status={getHealthStatus(thingSpeakData.alcoholLevel, 'alcoholLevel')}
+                  color="orange"
+                />
+              </div>
+            </div>
+
             {/* Stats Cards */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
               <StatsCard 
@@ -425,6 +717,7 @@ const Dashboard = () => {
                 value={dashboardData.overview.totalVehicles}
                 trend={TrendingUp}
                 color="blue"
+                isLoading={isLoadingData}
               />
               <StatsCard 
                 icon={Users} 
@@ -432,6 +725,7 @@ const Dashboard = () => {
                 value={dashboardData.overview.activeDrivers}
                 trend={TrendingUp}
                 color="green"
+                isLoading={isLoadingData}
               />
               <StatsCard 
                 icon={AlertTriangle} 
@@ -439,13 +733,15 @@ const Dashboard = () => {
                 value={dashboardData.overview.incidents}
                 trend={TrendingDown}
                 color="red"
+                isLoading={isLoadingData}
               />
               <StatsCard 
                 icon={Shield} 
                 title="Safety Score" 
                 value={`${dashboardData.overview.safetyScore}%`}
                 trend={TrendingUp}
-                color="cyan"
+                color="green"
+                isLoading={isLoadingData}
               />
               <StatsCard 
                 icon={Bell} 
@@ -453,6 +749,7 @@ const Dashboard = () => {
                 value={dashboardData.overview.alerts}
                 trend={TrendingUp}
                 color="orange"
+                isLoading={isLoadingData}
               />
             </div>
 
@@ -464,7 +761,7 @@ const Dashboard = () => {
                   <select
                     value={selectedTimeRange}
                     onChange={(e) => setSelectedTimeRange(e.target.value)}
-                    className="bg-gray-700/50 border border-gray-600/50 rounded-lg px-3 py-1 text-sm text-white"
+                    className="bg-gray-50 border border-gray-200 rounded-lg px-3 py-1 text-sm text-gray-900"
                   >
                     <option value="24h">Last 24 Hours</option>
                     <option value="7d">Last 7 Days</option>
@@ -473,44 +770,30 @@ const Dashboard = () => {
                 }
               >
                 <div className="text-center">
-                  <LineChart className="w-16 h-16 text-cyan-400 mx-auto mb-4" />
-                  <div className="text-gray-400">Chart visualization would go here</div>
+                  <LineChart className="w-16 h-16 text-green-500 mx-auto mb-4" />
+                  <div className="text-gray-500">Safety trend visualization</div>
+                  <div className="text-sm text-gray-400 mt-2">
+                    Real-time data from ThingSpeak integration
+                  </div>
                 </div>
               </ChartCard>
 
               <ChartCard 
-                title="Vehicle Status"
+                title="Health Monitoring"
                 actions={
-                  <button className="p-2 rounded-lg bg-gray-700/50 hover:bg-gray-600/50 transition-colors duration-300">
-                    <MoreVertical className="w-4 h-4" />
+                  <button className="p-2 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors duration-300">
+                    <MoreVertical className="w-4 h-4 text-gray-600" />
                   </button>
                 }
               >
                 <div className="text-center">
-                  <PieChart className="w-16 h-16 text-green-400 mx-auto mb-4" />
-                  <div className="text-gray-400">Pie chart visualization would go here</div>
+                  <Activity className="w-16 h-16 text-red-500 mx-auto mb-4" />
+                  <div className="text-gray-500">Blood pressure & alcohol monitoring</div>
+                  <div className="text-sm text-gray-400 mt-2">
+                    Current: {thingSpeakData.bloodPressure}mmHg, {thingSpeakData.alcoholLevel?.toFixed(3)}%
+                  </div>
                 </div>
               </ChartCard>
-            </div>
-
-            {/* Recent Activity */}
-            <div className="bg-gradient-to-br from-gray-800 to-gray-900 p-6 rounded-2xl border border-gray-700/50">
-              <div className="flex items-center justify-between mb-6">
-                <h3 className="text-lg font-semibold text-white">Recent Activity</h3>
-                <button className="text-cyan-400 hover:text-cyan-300 text-sm font-medium transition-colors duration-300">
-                  View All
-                </button>
-              </div>
-              <div className="space-y-4">
-                {dashboardData.recentActivity.map((activity) => (
-                  <ActivityItem 
-                    key={activity.id}
-                    activity={activity}
-                    getAlertIcon={getAlertIcon}
-                    getStatusColor={getStatusColor}
-                  />
-                ))}
-              </div>
             </div>
           </div>
         )}
@@ -519,69 +802,51 @@ const Dashboard = () => {
         {activeTab === 'vehicles' && (
           <div className="space-y-6">
             <div className="flex items-center justify-between">
-              <h2 className="text-2xl font-bold text-white">Vehicle Management</h2>
+              <h2 className="text-2xl font-bold text-gray-900">Vehicle Management</h2>
               <div className="flex items-center space-x-4">
-                <button className="flex items-center space-x-2 px-4 py-2 bg-cyan-500 hover:bg-cyan-600 rounded-lg transition-colors duration-300">
+                <button 
+                  onClick={handleExportReport}
+                  className="flex items-center space-x-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors duration-300"
+                >
                   <Download className="w-4 h-4" />
                   <span>Export Report</span>
                 </button>
-                <select className="bg-gray-700/50 border border-gray-600/50 rounded-lg px-3 py-2 text-white">
-                  <option>Last 30 Days</option>
-                  <option>Last 3 Months</option>
-                  <option>Last Year</option>
-                </select>
               </div>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              <ReportCard 
-                icon={BarChart3}
-                title="Safety Report"
-                description="Comprehensive safety analysis"
-                color="blue"
-                onGenerate={() => alert('Generating Safety Report...')}
-              />
-              <ReportCard 
-                icon={TrendingUp}
-                title="Performance Report"
-                description="Driver performance metrics"
-                color="green"
-                onGenerate={() => alert('Generating Performance Report...')}
-              />
-              <ReportCard 
-                icon={PieChart}
-                title="Fleet Report"
-                description="Vehicle utilization data"
-                color="purple"
-                onGenerate={() => alert('Generating Fleet Report...')}
-              />
-            </div>
-
-            {/* Recent Reports */}
-            <div className="bg-gradient-to-br from-gray-800 to-gray-900 p-6 rounded-2xl border border-gray-700/50">
-              <h3 className="text-lg font-semibold text-white mb-4">Recent Reports</h3>
-              <div className="space-y-3">
-                {[
-                  { name: 'Monthly Safety Summary', date: '2025-06-01', type: 'safety', size: '2.3 MB' },
-                  { name: 'Driver Performance Q2', date: '2025-05-28', type: 'performance', size: '1.8 MB' },
-                  { name: 'Fleet Utilization May', date: '2025-05-25', type: 'fleet', size: '3.1 MB' },
-                  { name: 'Incident Analysis', date: '2025-05-20', type: 'incident', size: '856 KB' }
-                ].map((report, index) => (
-                  <div key={index} className="flex items-center justify-between p-4 bg-gray-700/30 rounded-xl">
-                    <div className="flex items-center space-x-3">
-                      <div className="p-2 bg-gray-600/50 rounded-lg">
-                        <BarChart3 className="w-4 h-4 text-gray-400" />
-                      </div>
-                      <div>
-                        <div className="font-medium text-white">{report.name}</div>
-                        <div className="text-xs text-gray-400">{report.date} • {report.size}</div>
-                      </div>
-                    </div>
-                    <button className="p-2 rounded-lg bg-gray-600/50 hover:bg-gray-500/50 transition-colors duration-300">
-                      <Download className="w-4 h-4 text-gray-400" />
-                    </button>
-                  </div>
-                ))}
+            {/* Vehicles Table */}
+            <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+              <div className="px-6 py-4 border-b border-gray-200">
+                <h3 className="text-lg font-semibold text-gray-900">Active Vehicles</h3>
+              </div>
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead className="bg-gray-50">
+                    <tr>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Vehicle ID</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Driver</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Location</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">GPS Coordinates</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Blood Pressure</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Alcohol Level</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Alerts</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-200">
+                    {dashboardData.vehicles.map((vehicle) => (
+                      <VehicleRow 
+                        key={vehicle.id}
+                        vehicle={vehicle}
+                        getStatusColor={getStatusColor}
+                        onViewVehicle={handleViewVehicle}
+                        onEditVehicle={handleEditVehicle}
+                        onShowMoreOptions={handleMoreOptions}
+                      />
+                    ))}
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>
@@ -591,51 +856,301 @@ const Dashboard = () => {
         {activeTab === 'alerts' && (
           <div className="space-y-6">
             <div className="flex items-center justify-between">
-              <h2 className="text-2xl font-bold text-white">Alerts & Notifications</h2>
+              <h2 className="text-2xl font-bold text-gray-900">Alerts & Notifications</h2>
               <div className="flex items-center space-x-4">
-                <button className="px-4 py-2 bg-red-500/20 text-red-400 rounded-lg hover:bg-red-500/30 transition-colors duration-300">
+                <button className="px-4 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors duration-300">
                   Clear All
-                </button>
-                <button className="p-2 rounded-lg bg-gray-700/50 hover:bg-gray-600/50 transition-colors duration-300">
-                  <Settings className="w-4 h-4" />
                 </button>
               </div>
             </div>
 
-            {/* Alert Categories */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-              {[
-                { type: 'critical', count: 3, color: 'red', icon: AlertTriangle },
-                { type: 'warning', count: 8, color: 'yellow', icon: AlertCircle },
-                { type: 'info', count: 12, color: 'blue', icon: Bell },
-                { type: 'resolved', count: 45, color: 'green', icon: CheckCircle }
-              ].map((category) => (
-                <div key={category.type} className="bg-gradient-to-br from-gray-800 to-gray-900 p-4 rounded-xl border border-gray-700/50">
-                  <div className="flex items-center space-x-3">
-                    <div className={`p-2 bg-${category.color}-500/20 rounded-lg`}>
-                      <category.icon className={`w-5 h-5 text-${category.color}-400`} />
-                    </div>
-                    <div>
-                      <div className="text-xl font-bold text-white">{category.count}</div>
-                      <div className="text-sm text-gray-400 capitalize">{category.type}</div>
+            {/* Live Alerts from ThingSpeak Data */}
+            <div className="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">Live System Alerts</h3>
+              <div className="space-y-3">
+                {thingSpeakData.alcoholLevel > 0.05 && (
+                  <div className="flex items-start space-x-4 p-4 bg-red-50 rounded-xl border border-red-200">
+                    <AlertTriangle className="w-5 h-5 text-red-500 mt-1" />
+                    <div className="flex-1">
+                      <h4 className="font-medium text-red-900">Critical: Alcohol Violation Detected</h4>
+                      <p className="text-sm text-red-700 mt-1">
+                        Driver has exceeded safe alcohol limit: {thingSpeakData.alcoholLevel?.toFixed(3)}% BAC
+                      </p>
+                      <div className="text-xs text-red-600 mt-2">Vehicle VH-001 • Just now</div>
                     </div>
                   </div>
-                </div>
-              ))}
-            </div>
+                )}
+                
+                {thingSpeakData.bloodPressure > 140 && (
+                  <div className="flex items-start space-x-4 p-4 bg-yellow-50 rounded-xl border border-yellow-200">
+                    <AlertCircle className="w-5 h-5 text-yellow-500 mt-1" />
+                    <div className="flex-1">
+                      <h4 className="font-medium text-yellow-900">Warning: High Blood Pressure</h4>
+                      <p className="text-sm text-yellow-700 mt-1">
+                        Driver showing elevated blood pressure: {thingSpeakData.bloodPressure} mmHg
+                      </p>
+                      <div className="text-xs text-yellow-600 mt-2">Vehicle VH-001 • Just now</div>
+                    </div>
+                  </div>
+                )}
 
-            {/* Active Alerts */}
-            <div className="bg-gradient-to-br from-gray-800 to-gray-900 p-6 rounded-2xl border border-gray-700/50">
-              <h3 className="text-lg font-semibold text-white mb-4">Active Alerts</h3>
-              <div className="space-y-3">
-                {dashboardData.alerts.map((alert) => (
-                  <AlertItem key={alert.id} alert={alert} />
-                ))}
+                {thingSpeakData.alcoholLevel <= 0.05 && thingSpeakData.bloodPressure <= 140 && (
+                  <div className="flex items-start space-x-4 p-4 bg-green-50 rounded-xl border border-green-200">
+                    <CheckCircle className="w-5 h-5 text-green-500 mt-1" />
+                    <div className="flex-1">
+                      <h4 className="font-medium text-green-900">All Systems Normal</h4>
+                      <p className="text-sm text-green-700 mt-1">
+                        All monitored parameters within safe limits
+                      </p>
+                      <div className="text-xs text-green-600 mt-2">Last check: {thingSpeakData.lastUpdate?.toLocaleTimeString()}</div>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>
         )}
       </main>
+
+      {/* Vehicle View Modal */}
+      {showViewModal && selectedVehicle && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-2xl p-8 max-w-2xl w-full max-h-[80vh] overflow-y-auto">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-2xl font-bold text-gray-900">Vehicle Details</h2>
+              <button
+                onClick={() => setShowViewModal(false)}
+                className="p-2 rounded-lg bg-gray-100 hover:bg-gray-200 transition-colors duration-300"
+              >
+                <X className="w-5 h-5 text-gray-600" />
+              </button>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-500 mb-1">Vehicle ID</label>
+                  <div className="text-lg font-semibold text-gray-900">{selectedVehicle.id}</div>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-500 mb-1">Driver</label>
+                  <div className="text-lg text-gray-900">{selectedVehicle.driver}</div>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-500 mb-1">Status</label>
+                  <span className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(selectedVehicle.status)}`}>
+                    {selectedVehicle.status}
+                  </span>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-500 mb-1">Location</label>
+                  <div className="text-lg text-gray-900">{selectedVehicle.location}</div>
+                </div>
+              </div>
+              
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-500 mb-1">GPS Coordinates</label>
+                  <div className="text-lg text-gray-900">{selectedVehicle.longitude}, {selectedVehicle.latitude}</div>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-500 mb-1">Blood Pressure</label>
+                  <div className="text-lg text-gray-900">{selectedVehicle.bloodPressure} mmHg</div>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-500 mb-1">Alcohol Level</label>
+                  <div className="text-lg text-gray-900">{selectedVehicle.alcoholLevel}%</div>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-500 mb-1">Last Check</label>
+                  <div className="text-lg text-gray-900">{selectedVehicle.lastCheck}</div>
+                </div>
+              </div>
+            </div>
+            
+            <div className="mt-6 pt-6 border-t border-gray-200">
+              <div className="flex justify-end space-x-4">
+                <button
+                  onClick={() => setShowViewModal(false)}
+                  className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors duration-300"
+                >
+                  Close
+                </button>
+                <button
+                  onClick={() => {
+                    setShowViewModal(false);
+                    handleEditVehicle(selectedVehicle);
+                  }}
+                  className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-300"
+                >
+                  Edit Vehicle
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Vehicle Edit Modal */}
+      {showEditModal && selectedVehicle && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-2xl p-8 max-w-2xl w-full max-h-[80vh] overflow-y-auto">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-2xl font-bold text-gray-900">Edit Vehicle</h2>
+              <button
+                onClick={() => setShowEditModal(false)}
+                className="p-2 rounded-lg bg-gray-100 hover:bg-gray-200 transition-colors duration-300"
+              >
+                <X className="w-5 h-5 text-gray-600" />
+              </button>
+            </div>
+            
+            <form className="space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Vehicle ID</label>
+                  <input
+                    type="text"
+                    defaultValue={selectedVehicle.id}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:border-green-500 focus:ring-2 focus:ring-green-500/20 transition-all duration-300"
+                    disabled
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Driver Name</label>
+                  <input
+                    type="text"
+                    defaultValue={selectedVehicle.driver}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:border-green-500 focus:ring-2 focus:ring-green-500/20 transition-all duration-300"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Status</label>
+                  <select
+                    defaultValue={selectedVehicle.status}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:border-green-500 focus:ring-2 focus:ring-green-500/20 transition-all duration-300"
+                  >
+                    <option value="active">Active</option>
+                    <option value="inactive">Inactive</option>
+                    <option value="maintenance">Maintenance</option>
+                    <option value="violation">Violation</option>
+                    <option value="training">Training</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Location</label>
+                  <input
+                    type="text"
+                    defaultValue={selectedVehicle.location}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:border-green-500 focus:ring-2 focus:ring-green-500/20 transition-all duration-300"
+                  />
+                </div>
+              </div>
+              
+              <div className="pt-6 border-t border-gray-200">
+                <div className="flex justify-end space-x-4">
+                  <button
+                    type="button"
+                    onClick={() => setShowEditModal(false)}
+                    className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors duration-300"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      alert('Vehicle updated successfully!');
+                      setShowEditModal(false);
+                    }}
+                    className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-300"
+                  >
+                    Save Changes
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* More Options Modal */}
+      {showMoreOptionsModal && selectedVehicle && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-2xl p-8 max-w-md w-full">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-xl font-bold text-gray-900">Vehicle Actions</h2>
+              <button
+                onClick={() => setShowMoreOptionsModal(false)}
+                className="p-2 rounded-lg bg-gray-100 hover:bg-gray-200 transition-colors duration-300"
+              >
+                <X className="w-5 h-5 text-gray-600" />
+              </button>
+            </div>
+            
+            <div className="space-y-3">
+              <button
+                onClick={() => {
+                  alert(`Sending message to ${selectedVehicle.driver}...`);
+                  setShowMoreOptionsModal(false);
+                }}
+                className="w-full flex items-center space-x-3 px-4 py-3 text-left hover:bg-gray-50 rounded-lg transition-colors duration-300"
+              >
+                <Mail className="w-5 h-5 text-blue-600" />
+                <span className="text-gray-900">Send Message to Driver</span>
+              </button>
+              
+              <button
+                onClick={() => {
+                  alert(`Calling ${selectedVehicle.driver}...`);
+                  setShowMoreOptionsModal(false);
+                }}
+                className="w-full flex items-center space-x-3 px-4 py-3 text-left hover:bg-gray-50 rounded-lg transition-colors duration-300"
+              >
+                <Phone className="w-5 h-5 text-green-600" />
+                <span className="text-gray-900">Call Driver</span>
+              </button>
+              
+              <button
+                onClick={() => {
+                  alert(`Tracking ${selectedVehicle.id} on map...`);
+                  setShowMoreOptionsModal(false);
+                }}
+                className="w-full flex items-center space-x-3 px-4 py-3 text-left hover:bg-gray-50 rounded-lg transition-colors duration-300"
+              >
+                <MapPin className="w-5 h-5 text-purple-600" />
+                <span className="text-gray-900">Track on Map</span>
+              </button>
+              
+              <button
+                onClick={() => {
+                  alert(`Generating report for ${selectedVehicle.id}...`);
+                  setShowMoreOptionsModal(false);
+                }}
+                className="w-full flex items-center space-x-3 px-4 py-3 text-left hover:bg-gray-50 rounded-lg transition-colors duration-300"
+              >
+                <Download className="w-5 h-5 text-orange-600" />
+                <span className="text-gray-900">Generate Report</span>
+              </button>
+              
+              <div className="border-t border-gray-200 pt-3">
+                <button
+                  onClick={() => {
+                    if (confirm(`Are you sure you want to disable vehicle ${selectedVehicle.id}?`)) {
+                      alert(`Vehicle ${selectedVehicle.id} has been disabled.`);
+                      setShowMoreOptionsModal(false);
+                    }
+                  }}
+                  className="w-full flex items-center space-x-3 px-4 py-3 text-left hover:bg-red-50 rounded-lg transition-colors duration-300"
+                >
+                  <XCircle className="w-5 h-5 text-red-600" />
+                  <span className="text-red-600">Disable Vehicle</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
