@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { 
-  Bell, Settings, User, LogOut, Search, Filter, Download, 
-  Plus, AlertTriangle, CheckCircle, XCircle, Clock, 
+  Bell,  User, LogOut, Search, Download, 
+  AlertTriangle, CheckCircle, XCircle, 
   Car, Users, Shield, Activity, TrendingUp, TrendingDown,
-  MapPin, Battery, Wifi, WifiOff, Heart, Thermometer,
-  Calendar, MoreVertical, Eye, Edit, Trash2, RefreshCw,
-  BarChart3, PieChart, LineChart, Zap, Star, Award,
+  MapPin, Heart,
+  MoreVertical, Eye, Edit, RefreshCw,
+  LineChart,
   Navigation, Phone, Mail, AlertCircle, Droplet,
   Lock, EyeOff, ArrowRight, X
 } from 'lucide-react';
