@@ -155,16 +155,11 @@ const Homepage = () => {
           <div className="flex justify-between items-center h-20">
             <div className="flex-shrink-0 group flex items-center">
               <div className="w-10 h-10 sm:w-12 sm:h-12 mr-2 sm:mr-3">
-                <div className="w-full h-full bg-green-600 rounded-full flex items-center justify-center relative overflow-hidden">
-                  <div className="absolute inset-0 bg-gradient-to-br from-green-500 to-green-700" />
-                  <div className="relative">
-                    <div className="w-5 h-5 sm:w-6 sm:h-6 border-2 border-white rounded-full flex items-center justify-center">
-                      <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-white rounded-full" />
-                    </div>
-                    <div className="absolute -top-0.5 -right-0.5 sm:-top-1 sm:-right-1 w-2.5 h-2.5 sm:w-3 sm:h-3 bg-orange-500 rounded-full" />
-                    <div className="absolute -bottom-0.5 -left-0.5 sm:-bottom-1 sm:-left-1 w-2.5 h-2.5 sm:w-3 sm:h-3 bg-orange-500 rounded-full" />
-                  </div>
-                </div>
+                <img
+                  src="/logo_small.jpg"
+                  alt="EraSafeDrive Logo"
+                  className="w-full h-full object-contain rounded-full"
+                />
               </div>
               <h1 className="text-xl sm:text-2xl font-black text-green-600 group-hover:scale-105 transition-transform duration-300">
                 ERA <span className="text-orange-500">SAFE</span>drive
@@ -514,20 +509,15 @@ const Homepage = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-12 mb-8 sm:mb-12">
             <div className="sm:col-span-2 lg:col-span-2">
               <div className="flex items-center mb-4 sm:mb-6">
-                <div className="w-10 h-10 sm:w-12 sm:h-12 mr-2 sm:mr-3">
-                  <div className="w-full h-full bg-green-600 rounded-full flex items-center justify-center relative overflow-hidden">
-                    <div className="absolute inset-0 bg-gradient-to-br from-green-500 to-green-700" />
-                    <div className="relative">
-                      <div className="w-5 h-5 sm:w-6 sm:h-6 border-2 border-white rounded-full flex items-center justify-center">
-                        <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-white rounded-full" />
-                      </div>
-                      <div className="absolute -top-0.5 -right-0.5 sm:-top-1 sm:-right-1 w-2.5 h-2.5 sm:w-3 sm:h-3 bg-orange-500 rounded-full" />
-                      <div className="absolute -bottom-0.5 -left-0.5 sm:-bottom-1 sm:-left-1 w-2.5 h-2.5 sm:w-3 sm:h-3 bg-orange-500 rounded-full" />
-                    </div>
-                  </div>
+                <div className="w-12 h-12 sm:w-12 sm:h-12 mr-2 sm:mr-3">
+                  <img
+                    src="/logo_small.jpg"
+                    alt="EraSafeDrive Logo"
+                    className="w-full h-full object-contain rounded-full"
+                  />
                 </div>
-                <h3 className="text-xl sm:text-2xl font-black text-green-600">
-                  ERA <span className="text-orange-500">SAFE</span>drive
+                <h3 className="text-xl sm:text-2xl font-black text-orange-500">
+                  ERA <span className="text-green-600">SAFE</span>drive
                 </h3>
               </div>
               <p className="text-gray-600 leading-relaxed text-base sm:text-lg mb-4 sm:mb-6 max-w-md">

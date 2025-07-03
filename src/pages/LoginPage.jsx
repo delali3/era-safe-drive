@@ -169,24 +169,24 @@ const LoginPage = () => {
           </form>
 
           {/* Demo Credentials */}
-          <div className="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
+          {/* <div className="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
             <h4 className="font-medium text-blue-900 mb-2">Demo Credentials:</h4>
             <div className="text-sm text-blue-700 space-y-1">
               <div><strong>Admin:</strong> admin@erasafedrive.com / admin123</div>
               <div><strong>Manager:</strong> manager@erasafedrive.com / manager123</div>
               <div><strong>Operator:</strong> operator@erasafedrive.com / operator123</div>
             </div>
-          </div>
+          </div> */}
 
           <div className="mt-6 text-center">
             <p className="text-gray-600">
               Don't have an account?{' '}
-              <button 
+              {/* <button 
                 onClick={handleContactAdmin}
                 className="text-green-600 hover:text-green-700 font-medium transition-colors duration-300"
               >
                 Contact Administrator
-              </button>
+              </button> */}
             </p>
           </div>
         </div>
