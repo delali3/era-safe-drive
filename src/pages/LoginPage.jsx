@@ -73,20 +73,15 @@ const LoginPage = () => {
         <div className="text-center mb-8">
           <div className="flex items-center justify-center mb-4">
             <div className="w-16 h-16 mr-3">
-              <div className="w-full h-full bg-green-600 rounded-full flex items-center justify-center relative overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-br from-green-500 to-green-700" />
-                <div className="relative">
-                  <div className="w-8 h-8 border-3 border-white rounded-full flex items-center justify-center">
-                    <div className="w-3 h-3 bg-white rounded-full" />
-                  </div>
-                  <div className="absolute -top-1 -right-1 w-4 h-4 bg-orange-500 rounded-full" />
-                  <div className="absolute -bottom-1 -left-1 w-4 h-4 bg-orange-500 rounded-full" />
-                </div>
-              </div>
+              <img
+                src="/logo.jpg"
+                alt="EraSafeDrive Logo"
+                className="w-full h-full object-contain rounded-full"
+              />
             </div>
           </div>
-          <h1 className="text-3xl font-black text-green-600 mb-2">
-            ERA <span className="text-orange-500">SAFE</span>drive
+          <h1 className="text-3xl font-black text-orange-600 mb-2">
+            ERA <span className="text-green-600">SAFE</span>drive
           </h1>
           <p className="text-gray-600">Sign in to your account</p>
         </div>

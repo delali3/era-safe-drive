@@ -161,8 +161,8 @@ const Homepage = () => {
                   className="w-full h-full object-contain rounded-full"
                 />
               </div>
-              <h1 className="text-xl sm:text-2xl font-black text-green-600 group-hover:scale-105 transition-transform duration-300">
-                ERA <span className="text-orange-500">SAFE</span>drive
+              <h1 className="text-xl sm:text-2xl font-black text-orange-500 group-hover:scale-105 transition-transform duration-300">
+                ERA <span className="text-green-600">SAFE</span>drive
               </h1>
             </div>
             
