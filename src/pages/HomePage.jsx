@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Shield, Heart, MapPin, Car, Smartphone, Lock, CheckCircle, Users, Phone, Mail, Menu, X, Star, ArrowRight, Zap, Clock, Navigation, Activity, Droplet, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Shield, Heart, MapPin, Car, Smartphone, Lock, AlertCircle, CheckCircle, Users, Phone, Mail, Menu, X, Star, ArrowRight, Zap, Eye, Clock, Navigation, Activity, Droplet, ChevronLeft, ChevronRight } from 'lucide-react';
 
 const Homepage = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -154,19 +154,19 @@ const Homepage = () => {
         <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-20">
             <div className="flex-shrink-0 group flex items-center">
-              <div className="w-12 h-12 mr-3">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 mr-2 sm:mr-3">
                 <div className="w-full h-full bg-green-600 rounded-full flex items-center justify-center relative overflow-hidden">
                   <div className="absolute inset-0 bg-gradient-to-br from-green-500 to-green-700" />
                   <div className="relative">
-                    <div className="w-6 h-6 border-2 border-white rounded-full flex items-center justify-center">
-                      <div className="w-2 h-2 bg-white rounded-full" />
+                    <div className="w-5 h-5 sm:w-6 sm:h-6 border-2 border-white rounded-full flex items-center justify-center">
+                      <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-white rounded-full" />
                     </div>
-                    <div className="absolute -top-1 -right-1 w-3 h-3 bg-orange-500 rounded-full" />
-                    <div className="absolute -bottom-1 -left-1 w-3 h-3 bg-orange-500 rounded-full" />
+                    <div className="absolute -top-0.5 -right-0.5 sm:-top-1 sm:-right-1 w-2.5 h-2.5 sm:w-3 sm:h-3 bg-orange-500 rounded-full" />
+                    <div className="absolute -bottom-0.5 -left-0.5 sm:-bottom-1 sm:-left-1 w-2.5 h-2.5 sm:w-3 sm:h-3 bg-orange-500 rounded-full" />
                   </div>
                 </div>
               </div>
-              <h1 className="text-2xl font-black text-green-600 group-hover:scale-105 transition-transform duration-300">
+              <h1 className="text-xl sm:text-2xl font-black text-green-600 group-hover:scale-105 transition-transform duration-300">
                 ERA <span className="text-orange-500">SAFE</span>drive
               </h1>
             </div>
@@ -202,9 +202,17 @@ const Homepage = () => {
             <div className="md:hidden">
               <button
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className="p-2 rounded-full hover:bg-green-50 transition-colors duration-300"
+                className={`p-2 rounded-full transition-colors duration-300 ${
+                  isScrolled 
+                    ? 'hover:bg-green-50' 
+                    : 'hover:bg-white/10'
+                }`}
               >
-                {isMobileMenuOpen ? <X className="w-6 h-6 text-green-600" /> : <Menu className="w-6 h-6 text-green-600" />}
+                {isMobileMenuOpen ? (
+                  <X className={`w-6 h-6 ${isScrolled ? 'text-green-600' : 'text-white'}`} />
+                ) : (
+                  <Menu className={`w-6 h-6 ${isScrolled ? 'text-green-600' : 'text-white'}`} />
+                )}
               </button>
             </div>
           </div>
@@ -259,15 +267,15 @@ const Homepage = () => {
         {/* Slide Controls */}
         <button
           onClick={prevSlide}
-          className="absolute left-4 top-1/2 transform -translate-y-1/2 z-20 w-12 h-12 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center backdrop-blur-sm transition-all duration-300"
+          className="absolute left-2 sm:left-4 top-1/2 transform -translate-y-1/2 z-20 w-10 h-10 sm:w-12 sm:h-12 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center backdrop-blur-sm transition-all duration-300"
         >
-          <ChevronLeft className="w-6 h-6 text-white" />
+          <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
         </button>
         <button
           onClick={nextSlide}
-          className="absolute right-4 top-1/2 transform -translate-y-1/2 z-20 w-12 h-12 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center backdrop-blur-sm transition-all duration-300"
+          className="absolute right-2 sm:right-4 top-1/2 transform -translate-y-1/2 z-20 w-10 h-10 sm:w-12 sm:h-12 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center backdrop-blur-sm transition-all duration-300"
         >
-          <ChevronRight className="w-6 h-6 text-white" />
+          <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
         </button>
 
         {/* Slide Indicators */}
@@ -286,7 +294,7 @@ const Homepage = () => {
         <div className="relative z-10 text-center px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto">
           <div className="space-y-8">
             <div className="space-y-6">
-              <h1 className="text-6xl md:text-8xl font-black leading-none">
+              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black leading-none">
                 <span className="block text-white">
                   Drive Safe
                 </span>
@@ -294,7 +302,7 @@ const Homepage = () => {
                   Drive Smart
                 </span>
               </h1>
-              <p className="text-xl md:text-2xl text-gray-200 max-w-4xl mx-auto leading-relaxed font-light">
+              <p className="text-lg sm:text-xl md:text-2xl text-gray-200 max-w-4xl mx-auto leading-relaxed font-light">
                 Revolutionary AI-powered driver monitoring system that prevents impaired driving through 
                 <span className="text-green-400 font-semibold"> advanced health monitoring</span> and 
                 <span className="text-orange-400 font-semibold"> real-time GPS tracking</span>
@@ -305,18 +313,18 @@ const Homepage = () => {
             </div>
 
             {/* Stats */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6 max-w-4xl mx-auto">
               {stats.map((stat, index) => (
                 <div key={index} className="text-center group">
                   <div className="flex justify-center mb-2">
-                    <div className="p-3 bg-gradient-to-r from-green-500/20 to-orange-500/20 rounded-full group-hover:scale-110 transition-transform duration-300 backdrop-blur-sm">
+                    <div className="p-2 sm:p-3 bg-gradient-to-r from-green-500/20 to-orange-500/20 rounded-full group-hover:scale-110 transition-transform duration-300 backdrop-blur-sm">
                       <div className="text-green-400">
                         {stat.icon}
                       </div>
                     </div>
                   </div>
-                  <div className="text-2xl md:text-3xl font-bold text-white">{stat.number}</div>
-                  <div className="text-sm text-gray-300">{stat.label}</div>
+                  <div className="text-xl sm:text-2xl md:text-3xl font-bold text-white">{stat.number}</div>
+                  <div className="text-xs sm:text-sm text-gray-300">{stat.label}</div>
                 </div>
               ))}
             </div>
@@ -324,16 +332,16 @@ const Homepage = () => {
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <button
                 onClick={() => scrollToSection('features')}
-                className="group relative px-8 py-4 bg-gradient-to-r from-green-500 to-emerald-600 text-white font-bold rounded-full hover:from-green-600 hover:to-emerald-700 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-green-500/25 overflow-hidden"
+                className="group relative px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-green-500 to-emerald-600 text-white font-bold rounded-full hover:from-green-600 hover:to-emerald-700 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-green-500/25 overflow-hidden w-full sm:w-auto"
               >
                 <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                <div className="relative flex items-center">
+                <div className="relative flex items-center justify-center">
                   Explore Features
                   <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
                 </div>
               </button>
               
-              <button className="px-8 py-4 border-2 border-white/50 text-white font-bold rounded-full hover:bg-white/10 hover:border-white/70 transition-all duration-300 backdrop-blur-sm">
+              <button className="px-6 sm:px-8 py-3 sm:py-4 border-2 border-white/50 text-white font-bold rounded-full hover:bg-white/10 hover:border-white/70 transition-all duration-300 backdrop-blur-sm w-full sm:w-auto">
                 Watch Demo
               </button>
             </div>
@@ -344,40 +352,40 @@ const Homepage = () => {
       {/* Features Section */}
       <section id="features" className="py-32 relative bg-gray-50">
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-20">
-            <h2 className="text-5xl md:text-6xl font-black mb-6">
+          <div className="text-center mb-16 sm:mb-20">
+            <h2 className="text-4xl sm:text-5xl md:text-6xl font-black mb-6">
               <span className="text-green-600">
                 Next-Gen Safety
               </span>
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto">
               Cutting-edge technology that monitors critical safety parameters in real-time
             </p>
-            <div className="w-32 h-1 bg-gradient-to-r from-green-500 to-orange-500 mx-auto mt-8 rounded-full" />
+            <div className="w-24 sm:w-32 h-1 bg-gradient-to-r from-green-500 to-orange-500 mx-auto mt-6 sm:mt-8 rounded-full" />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
             {features.map((feature, index) => (
               <div
                 key={index}
-                className="group relative bg-white p-8 rounded-3xl border border-gray-200 hover:border-green-300 transition-all duration-500 hover:-translate-y-2 shadow-lg hover:shadow-xl overflow-hidden"
+                className="group relative bg-white p-6 sm:p-8 rounded-2xl sm:rounded-3xl border border-gray-200 hover:border-green-300 transition-all duration-500 hover:-translate-y-2 shadow-lg hover:shadow-xl overflow-hidden"
                 style={{ animationDelay: feature.delay }}
               >
                 {/* Hover effect overlay */}
                 <div className="absolute inset-0 bg-gradient-to-br from-green-50 to-orange-50 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                 
                 <div className="relative z-10">
-                  <div className={`inline-flex p-4 rounded-2xl bg-gradient-to-r ${feature.color} mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
+                  <div className={`inline-flex p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-gradient-to-r ${feature.color} mb-4 sm:mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
                     <div className="text-white">
                       {feature.icon}
                     </div>
                   </div>
                   
-                  <h3 className="text-2xl font-bold mb-4 group-hover:text-green-600 transition-colors duration-300">
+                  <h3 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4 group-hover:text-green-600 transition-colors duration-300">
                     {feature.title}
                   </h3>
                   
-                  <p className="text-gray-600 leading-relaxed group-hover:text-gray-700 transition-colors duration-300">
+                  <p className="text-sm sm:text-base text-gray-600 leading-relaxed group-hover:text-gray-700 transition-colors duration-300">
                     {feature.description}
                   </p>
                 </div>
@@ -392,18 +400,18 @@ const Homepage = () => {
         <div className="absolute inset-0 bg-gradient-to-br from-green-50 via-white to-orange-50" />
         
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-20">
-            <h2 className="text-5xl md:text-6xl font-black mb-6">
+          <div className="text-center mb-16 sm:mb-20">
+            <h2 className="text-4xl sm:text-5xl md:text-6xl font-black mb-6">
               <span className="bg-gradient-to-r from-green-600 via-emerald-600 to-orange-600 bg-clip-text text-transparent">
                 How It Works
               </span>
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto">
               Four simple steps powered by ThingSpeak IoT platform for real-time monitoring
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
             {steps.map((step, index) => (
               <div key={index} className="relative group">
                 {/* Connection line */}
@@ -412,20 +420,20 @@ const Homepage = () => {
                 )}
                 
                 <div className="relative z-10 text-center">
-                  <div className="relative mb-8">
-                    <div className="w-24 h-24 bg-gradient-to-r from-green-500 to-emerald-600 rounded-full flex items-center justify-center mx-auto group-hover:scale-110 transition-transform duration-300 shadow-lg shadow-green-500/25">
-                      <span className="text-3xl font-black text-white">{step.number}</span>
+                  <div className="relative mb-6 sm:mb-8">
+                    <div className="w-20 h-20 sm:w-24 sm:h-24 bg-gradient-to-r from-green-500 to-emerald-600 rounded-full flex items-center justify-center mx-auto group-hover:scale-110 transition-transform duration-300 shadow-lg shadow-green-500/25">
+                      <span className="text-2xl sm:text-3xl font-black text-white">{step.number}</span>
                     </div>
-                    <div className="absolute -top-2 -right-2 w-8 h-8 bg-gradient-to-r from-orange-500 to-red-500 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <div className="absolute -top-1 sm:-top-2 -right-1 sm:-right-2 w-6 h-6 sm:w-8 sm:h-8 bg-gradient-to-r from-orange-500 to-red-500 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                       {step.icon}
                     </div>
                   </div>
                   
-                  <h3 className="text-2xl font-bold mb-4 group-hover:text-green-600 transition-colors duration-300">
+                  <h3 className="text-lg sm:text-xl md:text-2xl font-bold mb-3 sm:mb-4 group-hover:text-green-600 transition-colors duration-300">
                     {step.title}
                   </h3>
                   
-                  <p className="text-gray-600 leading-relaxed group-hover:text-gray-700 transition-colors duration-300">
+                  <p className="text-sm sm:text-base text-gray-600 leading-relaxed group-hover:text-gray-700 transition-colors duration-300">
                     {step.description}
                   </p>
                 </div>
@@ -434,28 +442,28 @@ const Homepage = () => {
           </div>
 
           {/* ThingSpeak Integration Info */}
-          <div className="mt-20 text-center">
-            <div className="bg-gradient-to-r from-green-100 to-orange-100 rounded-3xl p-8 max-w-4xl mx-auto">
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">Real-Time Data Monitoring</h3>
-              <p className="text-gray-700 mb-6">
+          <div className="mt-16 sm:mt-20 text-center">
+            <div className="bg-gradient-to-r from-green-100 to-orange-100 rounded-2xl sm:rounded-3xl p-6 sm:p-8 max-w-4xl mx-auto">
+              <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-3 sm:mb-4">Real-Time Data Monitoring</h3>
+              <p className="text-sm sm:text-base text-gray-700 mb-4 sm:mb-6">
                 Our system continuously monitors and transmits four critical data points to the cloud:
               </p>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div className="bg-white rounded-lg p-4 shadow-sm">
-                  <Navigation className="w-8 h-8 text-green-600 mx-auto mb-2" />
-                  <div className="font-semibold text-sm">Longitude</div>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+                <div className="bg-white rounded-lg p-3 sm:p-4 shadow-sm">
+                  <Navigation className="w-6 h-6 sm:w-8 sm:h-8 text-green-600 mx-auto mb-2" />
+                  <div className="font-semibold text-xs sm:text-sm">Longitude</div>
                 </div>
-                <div className="bg-white rounded-lg p-4 shadow-sm">
-                  <MapPin className="w-8 h-8 text-green-600 mx-auto mb-2" />
-                  <div className="font-semibold text-sm">Latitude</div>
+                <div className="bg-white rounded-lg p-3 sm:p-4 shadow-sm">
+                  <MapPin className="w-6 h-6 sm:w-8 sm:h-8 text-green-600 mx-auto mb-2" />
+                  <div className="font-semibold text-xs sm:text-sm">Latitude</div>
                 </div>
-                <div className="bg-white rounded-lg p-4 shadow-sm">
-                  <Activity className="w-8 h-8 text-red-600 mx-auto mb-2" />
-                  <div className="font-semibold text-sm">Blood Pressure</div>
+                <div className="bg-white rounded-lg p-3 sm:p-4 shadow-sm">
+                  <Activity className="w-6 h-6 sm:w-8 sm:h-8 text-red-600 mx-auto mb-2" />
+                  <div className="font-semibold text-xs sm:text-sm">Blood Pressure</div>
                 </div>
-                <div className="bg-white rounded-lg p-4 shadow-sm">
-                  <Droplet className="w-8 h-8 text-orange-600 mx-auto mb-2" />
-                  <div className="font-semibold text-sm">Alcohol Level</div>
+                <div className="bg-white rounded-lg p-3 sm:p-4 shadow-sm">
+                  <Droplet className="w-6 h-6 sm:w-8 sm:h-8 text-orange-600 mx-auto mb-2" />
+                  <div className="font-semibold text-xs sm:text-sm">Alcohol Level</div>
                 </div>
               </div>
             </div>
@@ -468,7 +476,7 @@ const Homepage = () => {
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.1),transparent)]" />
         
         <div className="relative max-w-5xl mx-auto text-center px-4 sm:px-6 lg:px-8">
-          <h2 className="text-5xl md:text-6xl font-black mb-8 text-white">
+          <h2 className="text-4xl sm:text-5xl md:text-6xl font-black mb-6 sm:mb-8 text-white">
             Ready to Transform
             <br />
             <span className="text-orange-300">
@@ -476,24 +484,24 @@ const Homepage = () => {
             </span>
           </h2>
           
-          <p className="text-xl text-green-100 mb-12 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-lg sm:text-xl text-green-100 mb-8 sm:mb-12 max-w-3xl mx-auto leading-relaxed">
             Join thousands of forward-thinking companies and individuals who are already using EraSafeDrive 
             to protect their most valuable assets - their people.
           </p>
           
-          <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
+          <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center items-center">
             <button
               onClick={() => scrollToSection('contact')}
-              className="group relative px-10 py-5 bg-white text-green-600 font-bold text-lg rounded-full hover:bg-gray-100 transform hover:scale-105 transition-all duration-300 shadow-lg overflow-hidden"
+              className="group relative px-8 sm:px-10 py-4 sm:py-5 bg-white text-green-600 font-bold text-base sm:text-lg rounded-full hover:bg-gray-100 transform hover:scale-105 transition-all duration-300 shadow-lg overflow-hidden w-full sm:w-auto"
             >
-              <div className="relative flex items-center">
-                <CheckCircle className="mr-3 w-6 h-6" />
+              <div className="relative flex items-center justify-center">
+                <CheckCircle className="mr-2 sm:mr-3 w-5 h-5 sm:w-6 sm:h-6" />
                 Start Your Journey
-                <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
+                <ArrowRight className="ml-2 w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform duration-300" />
               </div>
             </button>
             
-            <button className="px-10 py-5 border-2 border-white/50 text-white font-bold text-lg rounded-full hover:bg-white/10 hover:border-white/70 transition-all duration-300 backdrop-blur-sm">
+            <button className="px-8 sm:px-10 py-4 sm:py-5 border-2 border-white/50 text-white font-bold text-base sm:text-lg rounded-full hover:bg-white/10 hover:border-white/70 transition-all duration-300 backdrop-blur-sm w-full sm:w-auto">
               Schedule Demo
             </button>
           </div>
@@ -501,50 +509,50 @@ const Homepage = () => {
       </section>
 
       {/* Footer */}
-      <footer id="contact" className="relative py-20 border-t border-gray-200 bg-white">
+      <footer id="contact" className="relative py-16 sm:py-20 border-t border-gray-200 bg-white">
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
-            <div className="lg:col-span-2">
-              <div className="flex items-center mb-6">
-                <div className="w-12 h-12 mr-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-12 mb-8 sm:mb-12">
+            <div className="sm:col-span-2 lg:col-span-2">
+              <div className="flex items-center mb-4 sm:mb-6">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 mr-2 sm:mr-3">
                   <div className="w-full h-full bg-green-600 rounded-full flex items-center justify-center relative overflow-hidden">
                     <div className="absolute inset-0 bg-gradient-to-br from-green-500 to-green-700" />
                     <div className="relative">
-                      <div className="w-6 h-6 border-2 border-white rounded-full flex items-center justify-center">
-                        <div className="w-2 h-2 bg-white rounded-full" />
+                      <div className="w-5 h-5 sm:w-6 sm:h-6 border-2 border-white rounded-full flex items-center justify-center">
+                        <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-white rounded-full" />
                       </div>
-                      <div className="absolute -top-1 -right-1 w-3 h-3 bg-orange-500 rounded-full" />
-                      <div className="absolute -bottom-1 -left-1 w-3 h-3 bg-orange-500 rounded-full" />
+                      <div className="absolute -top-0.5 -right-0.5 sm:-top-1 sm:-right-1 w-2.5 h-2.5 sm:w-3 sm:h-3 bg-orange-500 rounded-full" />
+                      <div className="absolute -bottom-0.5 -left-0.5 sm:-bottom-1 sm:-left-1 w-2.5 h-2.5 sm:w-3 sm:h-3 bg-orange-500 rounded-full" />
                     </div>
                   </div>
                 </div>
-                <h3 className="text-2xl font-black text-green-600">
+                <h3 className="text-xl sm:text-2xl font-black text-green-600">
                   ERA <span className="text-orange-500">SAFE</span>drive
                 </h3>
               </div>
-              <p className="text-gray-600 leading-relaxed text-lg mb-6 max-w-md">
+              <p className="text-gray-600 leading-relaxed text-base sm:text-lg mb-4 sm:mb-6 max-w-md">
                 Leading the future of driver safety technology with innovative solutions that save lives 
                 and protect communities worldwide.
               </p>
-              <div className="flex space-x-4">
+              <div className="flex space-x-3 sm:space-x-4">
                 {['linkedin', 'twitter', 'github'].map((social) => (
                   <button
                     key={social}
-                    className="w-12 h-12 bg-green-50 hover:bg-green-100 rounded-full flex items-center justify-center transition-all duration-300 hover:scale-110 border border-green-200 hover:border-green-300"
+                    className="w-10 h-10 sm:w-12 sm:h-12 bg-green-50 hover:bg-green-100 rounded-full flex items-center justify-center transition-all duration-300 hover:scale-110 border border-green-200 hover:border-green-300"
                   >
                     <span className="sr-only">{social}</span>
-                    <div className="w-5 h-5 bg-gradient-to-r from-green-500 to-orange-500 rounded-full" />
+                    <div className="w-4 h-4 sm:w-5 sm:h-5 bg-gradient-to-r from-green-500 to-orange-500 rounded-full" />
                   </button>
                 ))}
               </div>
             </div>
             
             <div>
-              <h4 className="text-xl font-bold mb-6 text-green-600">Solutions</h4>
-              <ul className="space-y-3">
+              <h4 className="text-lg sm:text-xl font-bold mb-4 sm:mb-6 text-green-600">Solutions</h4>
+              <ul className="space-y-2 sm:space-y-3">
                 {['Fleet Management', 'Personal Vehicles', 'Commercial Transport', 'Emergency Services'].map((item) => (
                   <li key={item}>
-                    <button className="text-gray-600 hover:text-green-600 transition-colors duration-300 hover:translate-x-1 transform">
+                    <button className="text-sm sm:text-base text-gray-600 hover:text-green-600 transition-colors duration-300 hover:translate-x-1 transform">
                       {item}
                     </button>
                   </li>
@@ -553,29 +561,29 @@ const Homepage = () => {
             </div>
             
             <div>
-              <h4 className="text-xl font-bold mb-6 text-green-600">Contact</h4>
-              <div className="space-y-4">
+              <h4 className="text-lg sm:text-xl font-bold mb-4 sm:mb-6 text-green-600">Contact</h4>
+              <div className="space-y-3 sm:space-y-4">
                 <div className="flex items-center group">
-                  <div className="w-10 h-10 bg-gradient-to-r from-green-100 to-orange-100 rounded-full flex items-center justify-center mr-4 group-hover:scale-110 transition-transform duration-300">
-                    <Mail className="w-5 h-5 text-green-600" />
+                  <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-r from-green-100 to-orange-100 rounded-full flex items-center justify-center mr-3 sm:mr-4 group-hover:scale-110 transition-transform duration-300">
+                    <Mail className="w-4 h-4 sm:w-5 sm:h-5 text-green-600" />
                   </div>
-                  <span className="text-gray-600 group-hover:text-green-600 transition-colors duration-300">
+                  <span className="text-sm sm:text-base text-gray-600 group-hover:text-green-600 transition-colors duration-300">
                     hello@erasafedrive.com
                   </span>
                 </div>
                 <div className="flex items-center group">
-                  <div className="w-10 h-10 bg-gradient-to-r from-green-100 to-orange-100 rounded-full flex items-center justify-center mr-4 group-hover:scale-110 transition-transform duration-300">
-                    <Phone className="w-5 h-5 text-green-600" />
+                  <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-r from-green-100 to-orange-100 rounded-full flex items-center justify-center mr-3 sm:mr-4 group-hover:scale-110 transition-transform duration-300">
+                    <Phone className="w-4 h-4 sm:w-5 sm:h-5 text-green-600" />
                   </div>
-                  <span className="text-gray-600 group-hover:text-green-600 transition-colors duration-300">
+                  <span className="text-sm sm:text-base text-gray-600 group-hover:text-green-600 transition-colors duration-300">
                     +1 (555) 123-4567
                   </span>
                 </div>
                 <div className="flex items-center group">
-                  <div className="w-10 h-10 bg-gradient-to-r from-green-100 to-orange-100 rounded-full flex items-center justify-center mr-4 group-hover:scale-110 transition-transform duration-300">
-                    <Users className="w-5 h-5 text-green-600" />
+                  <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-r from-green-100 to-orange-100 rounded-full flex items-center justify-center mr-3 sm:mr-4 group-hover:scale-110 transition-transform duration-300">
+                    <Users className="w-4 h-4 sm:w-5 sm:h-5 text-green-600" />
                   </div>
-                  <span className="text-gray-600 group-hover:text-green-600 transition-colors duration-300">
+                  <span className="text-sm sm:text-base text-gray-600 group-hover:text-green-600 transition-colors duration-300">
                     24/7 Support
                   </span>
                 </div>
@@ -583,8 +591,8 @@ const Homepage = () => {
             </div>
           </div>
           
-          <div className="border-t border-gray-200 pt-8 text-center">
-            <p className="text-gray-500 text-lg">
+          <div className="border-t border-gray-200 pt-6 sm:pt-8 text-center">
+            <p className="text-sm sm:text-base lg:text-lg text-gray-500">
               &copy; 2025 EraSafeDrive. All rights reserved. 
               <span className="text-green-600"> Driving safety into the future.</span>
             </p>

@@ -1,7 +1,9 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Mail, Lock, Eye, EyeOff, ArrowRight } from 'lucide-react';
 
 const LoginPage = () => {
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [showForgotPassword, setShowForgotPassword] = useState(false);
@@ -12,13 +14,35 @@ const LoginPage = () => {
     password: ''
   });
 
+  // Authentication Configuration (same as Dashboard)
+  const AUTH_CONFIG = {
+    users: [
+      { email: 'admin@erasafedrive.com', password: 'admin123', name: 'System Administrator', role: 'admin' },
+      { email: 'manager@erasafedrive.com', password: 'manager123', name: 'Fleet Manager', role: 'manager' },
+      { email: 'operator@erasafedrive.com', password: 'operator123', name: 'Fleet Operator', role: 'operator' }
+    ]
+  };
+
   const handleLogin = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    // Simulate API call
+    
+    // Simulate API call delay
     setTimeout(() => {
-      setIsLoading(false);
-      alert('Login successful!');
+      const user = AUTH_CONFIG.users.find(
+        u => u.email === loginForm.email && u.password === loginForm.password
+      );
+
+      if (user) {
+        // Save user to localStorage for Dashboard authentication
+        localStorage.setItem('erasafeDriveUser', JSON.stringify(user));
+        setIsLoading(false);
+        // Redirect to dashboard
+        navigate('/dashboard');
+      } else {
+        setIsLoading(false);
+        alert('Invalid email or password');
+      }
     }, 1500);
   };
 
@@ -69,7 +93,7 @@ const LoginPage = () => {
 
         {/* Login Form */}
         <div className="bg-white border border-gray-200 rounded-2xl p-8 shadow-lg">
-          <div className="space-y-6">
+          <form onSubmit={handleLogin} className="space-y-6">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Email Address
@@ -129,7 +153,7 @@ const LoginPage = () => {
             </div>
 
             <button
-              onClick={handleLogin}
+              type="submit"
               disabled={isLoading}
               className="w-full bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-semibold py-3 px-4 rounded-lg transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
             >
@@ -142,6 +166,16 @@ const LoginPage = () => {
                 </>
               )}
             </button>
+          </form>
+
+          {/* Demo Credentials */}
+          <div className="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
+            <h4 className="font-medium text-blue-900 mb-2">Demo Credentials:</h4>
+            <div className="text-sm text-blue-700 space-y-1">
+              <div><strong>Admin:</strong> admin@erasafedrive.com / admin123</div>
+              <div><strong>Manager:</strong> manager@erasafedrive.com / manager123</div>
+              <div><strong>Operator:</strong> operator@erasafedrive.com / operator123</div>
+            </div>
           </div>
 
           <div className="mt-6 text-center">

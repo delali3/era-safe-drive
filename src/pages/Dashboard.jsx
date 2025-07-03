@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { 
-  Bell,  User, LogOut, Search, Download, 
-  AlertTriangle, CheckCircle, XCircle, 
+  Bell, Settings, User, LogOut, Search, Filter, Download, 
+  Plus, AlertTriangle, CheckCircle, XCircle, Clock, 
   Car, Users, Shield, Activity, TrendingUp, TrendingDown,
-  MapPin, Heart,
-  MoreVertical, Eye, Edit, RefreshCw,
-  LineChart,
+  MapPin, Battery, Wifi, WifiOff, Heart, Thermometer,
+  Calendar, MoreVertical, Eye, Edit, Trash2, RefreshCw,
+  BarChart3, PieChart, LineChart, Zap, Star, Award,
   Navigation, Phone, Mail, AlertCircle, Droplet,
-  Lock, EyeOff, ArrowRight, X
+  Lock, EyeOff, ArrowRight
 } from 'lucide-react';
 
 // Authentication Configuration
