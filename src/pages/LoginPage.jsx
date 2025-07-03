@@ -74,7 +74,7 @@ const LoginPage = () => {
           <div className="flex items-center justify-center mb-4">
             <div className="w-16 h-16 mr-3">
               <img
-                src="/logo.jpg"
+                src="/logo_small.jpg"
                 alt="EraSafeDrive Logo"
                 className="w-full h-full object-contain rounded-full"
               />
