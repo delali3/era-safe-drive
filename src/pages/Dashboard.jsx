@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { 
-  Bell, Settings, User, LogOut, Search, Filter, Download, 
-  Plus, AlertTriangle, CheckCircle, XCircle, Clock, 
+  Bell, User, LogOut, Search, Download, 
+  AlertTriangle, CheckCircle, XCircle, 
   Car, Users, Shield, Activity, TrendingUp, TrendingDown,
-  MapPin, Battery, Wifi, WifiOff, Heart, Thermometer,
-  Calendar, MoreVertical, Eye, Edit, Trash2, RefreshCw,
-  BarChart3, PieChart, LineChart, Zap, Star, Award,
+  MapPin, Heart,
+  MoreVertical, Eye, Edit, RefreshCw,
+  LineChart,
   Navigation, Phone, Mail, AlertCircle, Droplet,
   Lock, EyeOff, ArrowRight
 } from 'lucide-react';
+import SEO from '../components/SEO';
 
 // Authentication Configuration
 const AUTH_CONFIG = {
@@ -646,6 +647,12 @@ const Dashboard = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 text-gray-900">
+      <SEO 
+        title="Dashboard - EraSafeDrive Driver Safety Monitoring"
+        description="Monitor your fleet's driver safety with real-time GPS tracking, alcohol detection, blood pressure monitoring, and comprehensive vehicle management."
+        keywords="driver safety dashboard, fleet management, real-time monitoring, vehicle tracking, driver health monitoring"
+        url="https://erasafedrive.com/dashboard"
+      />
       <Header 
         activeTab={activeTab}
         setActiveTab={setActiveTab}

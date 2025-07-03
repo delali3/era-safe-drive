@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Mail, Lock, Eye, EyeOff, ArrowRight } from 'lucide-react';
+import SEO from '../components/SEO';
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -68,6 +69,12 @@ const LoginPage = () => {
 
   return (
     <div className="min-h-screen bg-white flex items-center justify-center p-4">
+      <SEO 
+        title="Login - EraSafeDrive Driver Safety Monitoring System"
+        description="Sign in to your EraSafeDrive account to access the AI-powered driver safety monitoring dashboard and manage your fleet safety operations."
+        keywords="login, driver safety dashboard, fleet management login, EraSafeDrive access, driver monitoring login"
+        url="https://erasafedrive.com/login"
+      />
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="text-center mb-8">

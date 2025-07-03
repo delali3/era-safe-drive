@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Shield, Heart, MapPin, Car, Smartphone, Lock, CheckCircle, Users, Phone, Mail, Menu, X, Star, ArrowRight, Zap, Clock, Navigation, Activity, Droplet, ChevronLeft, ChevronRight } from 'lucide-react';
+import SEO from '../components/SEO';
 
 const Homepage = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -145,6 +146,12 @@ const Homepage = () => {
 
   return (
     <div className="min-h-screen bg-white text-gray-900 overflow-x-hidden">
+      <SEO 
+        title="EraSafeDrive - AI-Powered Driver Safety Monitoring System"
+        description="Revolutionary AI-powered driver monitoring system that prevents impaired driving through advanced health monitoring, real-time GPS tracking, and alcohol detection technology."
+        keywords="driver safety, alcohol detection, blood pressure monitoring, GPS tracking, fleet management, driver monitoring system, vehicle safety, IoT, ThingSpeak, impaired driving prevention"
+        url="https://erasafedrive.com/"
+      />
       {/* Header */}
       <header className={`fixed w-full z-40 transition-all duration-500 ${
         isScrolled 
