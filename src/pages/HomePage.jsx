@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Shield, Heart, MapPin, Car, Smartphone, Lock, AlertCircle, CheckCircle, Users, Phone, Mail, Menu, X, Star, ArrowRight, Zap, Eye, Clock, Navigation, Activity, Droplet, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Shield, Heart, MapPin, Car, Smartphone, Lock, CheckCircle, Users, Phone, Mail, Menu, X, Star, ArrowRight, Zap, Clock, Navigation, Activity, Droplet, ChevronLeft, ChevronRight } from 'lucide-react';
 
 const Homepage = () => {
   const [isScrolled, setIsScrolled] = useState(false);
