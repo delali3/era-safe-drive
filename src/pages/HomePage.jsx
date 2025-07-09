@@ -192,6 +192,16 @@ const Homepage = () => {
                   </button>
                 ))}
                 <a
+                  href="/awareness"
+                  className={`px-4 py-2 text-sm font-medium transition-all duration-300 rounded-full hover:scale-105 ${
+                    isScrolled 
+                      ? 'text-gray-700 hover:text-green-600 hover:bg-green-50'
+                      : 'text-white hover:text-green-400 hover:bg-white/10'
+                  }`}
+                >
+                  Awareness
+                </a>
+                <a
                   href="/login"
                   className="ml-4 px-6 py-2 bg-gradient-to-r from-green-500 to-emerald-600 text-white text-sm font-medium rounded-full hover:from-green-600 hover:to-emerald-700 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-green-500/25"
                 >
@@ -233,6 +243,12 @@ const Homepage = () => {
                   {section.charAt(0).toUpperCase() + section.slice(1).replace('-', ' ')}
                 </button>
               ))}
+              <a
+                href="/awareness"
+                className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-green-600 hover:bg-green-50 rounded-lg transition-all duration-300 w-full text-left"
+              >
+                Awareness
+              </a>
               <a
                 href="/login"
                 className="block px-3 py-2 mt-4 text-center bg-gradient-to-r from-green-500 to-emerald-600 text-white font-medium rounded-lg hover:from-green-600 hover:to-emerald-700 transition-all duration-300"
