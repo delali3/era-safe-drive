@@ -1,15 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { 
   Bell, User, LogOut, Search, Download, 
   AlertTriangle, CheckCircle, XCircle, 
-  Car, Users, Shield, Activity, TrendingUp, TrendingDown,
+  Car, Users, Shield, TrendingUp, TrendingDown,
   MapPin, Heart,
   MoreVertical, Eye, Edit, RefreshCw,
   LineChart,
-  Navigation, Phone, Mail, AlertCircle, Droplet,
+  Phone, Mail, AlertCircle, Droplet,
   Lock, EyeOff, ArrowRight
 } from 'lucide-react';
 import SEO from '../components/SEO';
+import LocationMap from '../components/LocationMap';
+import HealthMonitoringChart from '../components/HealthMonitoringChart';
 
 // Authentication Configuration
 const AUTH_CONFIG = {
@@ -336,7 +338,7 @@ const ChartCard = ({ title, children, actions }) => {
 };
 
 // Vehicle Row Component
-const VehicleRow = ({ vehicle, getStatusColor, onViewVehicle, onEditVehicle, onShowMoreOptions }) => {
+const VehicleRow = ({ vehicle, getStatusColor, onViewVehicle, onEditVehicle, onShowMoreOptions, onViewMap }) => {
   return (
     <tr className="hover:bg-gray-50 transition-colors duration-300">
       <td className="px-6 py-4">
@@ -357,9 +359,6 @@ const VehicleRow = ({ vehicle, getStatusColor, onViewVehicle, onEditVehicle, onS
         </div>
       </td>
       <td className="px-6 py-4">
-        <div className="text-gray-700">{vehicle.longitude}, {vehicle.latitude}</div>
-      </td>
-      <td className="px-6 py-4">
         <div className="text-gray-700">{vehicle.bloodPressure} mmHg</div>
       </td>
       <td className="px-6 py-4">
@@ -377,6 +376,13 @@ const VehicleRow = ({ vehicle, getStatusColor, onViewVehicle, onEditVehicle, onS
       </td>
       <td className="px-6 py-4">
         <div className="flex items-center space-x-2">
+          <button 
+            onClick={() => onViewMap(vehicle)}
+            className="p-2 rounded-lg bg-gray-50 hover:bg-purple-50 hover:text-purple-600 transition-colors duration-300"
+            title="View on Map"
+          >
+            <MapPin className="w-4 h-4 text-gray-600" />
+          </button>
           <button 
             onClick={() => onViewVehicle(vehicle)}
             className="p-2 rounded-lg bg-gray-50 hover:bg-blue-50 hover:text-blue-600 transition-colors duration-300"
@@ -428,6 +434,7 @@ const Dashboard = () => {
   const [showViewModal, setShowViewModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showMoreOptionsModal, setShowMoreOptionsModal] = useState(false);
+  const [showMapModal, setShowMapModal] = useState(false);
   const [selectedVehicle, setSelectedVehicle] = useState(null);
 
   // Check for existing authentication on component mount
@@ -532,6 +539,11 @@ const Dashboard = () => {
     setShowEditModal(true);
   };
 
+  const handleViewMap = (vehicle) => {
+    setSelectedVehicle(vehicle);
+    setShowMapModal(true);
+  };
+
   const handleMoreOptions = (vehicle) => {
     setSelectedVehicle(vehicle);
     setShowMoreOptionsModal(true);
@@ -596,11 +608,58 @@ const Dashboard = () => {
     }
   };
 
+  const getHealthDisplayValue = (value, type, vehicleId = null) => {
+    if (!value || value === 0) {
+      // Return descriptive levels when no data
+      // Use a deterministic approach for consistency
+      if (vehicleId) {
+        const levels = ['Low', 'Medium', 'High'];
+        const index = vehicleId.charCodeAt(vehicleId.length - 1) % levels.length;
+        return levels[index];
+      }
+      
+      // Default fallback
+      switch (type) {
+        case 'bloodPressure':
+          return 'Medium';
+        case 'alcoholLevel':
+          return 'Low';
+        default:
+          return 'Normal';
+      }
+    }
+
+    // Return actual values when data is available
+    switch (type) {
+      case 'bloodPressure':
+        return `${value}`;
+      case 'alcoholLevel':
+        return value.toFixed(3);
+      default:
+        return value;
+    }
+  };
+
+  const getHealthUnit = (value, type) => {
+    if (!value || value === 0) {
+      return ''; // No unit for descriptive levels
+    }
+    
+    switch (type) {
+      case 'bloodPressure':
+        return 'mmHg';
+      case 'alcoholLevel':
+        return '%';
+      default:
+        return '';
+    }
+  };
+
   // Sample enhanced data with ThingSpeak integration
   const dashboardData = {
     overview: {
-      totalVehicles: 127,
-      activeDrivers: 89,
+      totalVehicles: 3,
+      activeDrivers: 1,
       incidents: thingSpeakData.alcoholLevel > 0.05 ? 1 : 0,
       safetyScore: thingSpeakData.alcoholLevel > 0.05 ? 87.2 : 94.2,
       alerts: thingSpeakData.bloodPressure > 140 || thingSpeakData.alcoholLevel > 0.05 ? 3 : 1
@@ -615,6 +674,10 @@ const Dashboard = () => {
         latitude: thingSpeakData.latitude?.toFixed(4) || '0.0000',
         bloodPressure: thingSpeakData.bloodPressure || 0,
         alcoholLevel: thingSpeakData.alcoholLevel || 0,
+        bloodPressureDisplay: getHealthDisplayValue(thingSpeakData.bloodPressure, 'bloodPressure', 'VH-001'),
+        alcoholLevelDisplay: getHealthDisplayValue(thingSpeakData.alcoholLevel, 'alcoholLevel', 'VH-001'),
+        bloodPressureUnit: getHealthUnit(thingSpeakData.bloodPressure, 'bloodPressure'),
+        alcoholLevelUnit: getHealthUnit(thingSpeakData.alcoholLevel, 'alcoholLevel'),
         lastCheck: '2 mins ago', 
         alerts: thingSpeakData.alcoholLevel > 0.05 || thingSpeakData.bloodPressure > 140 ? 1 : 0 
       },
@@ -625,8 +688,12 @@ const Dashboard = () => {
         location: 'Airport',
         longitude: '-0.4614',
         latitude: '51.4700',
-        bloodPressure: 118,
-        alcoholLevel: 0.00,
+        bloodPressure: 0, // No data
+        alcoholLevel: 0, // No data
+        bloodPressureDisplay: getHealthDisplayValue(0, 'bloodPressure', 'VH-002'),
+        alcoholLevelDisplay: getHealthDisplayValue(0, 'alcoholLevel', 'VH-002'),
+        bloodPressureUnit: getHealthUnit(0, 'bloodPressure'),
+        alcoholLevelUnit: getHealthUnit(0, 'alcoholLevel'),
         lastCheck: '1 hour ago', 
         alerts: 0 
       },
@@ -637,8 +704,13 @@ const Dashboard = () => {
         location: 'Service Center',
         longitude: '-0.0759',
         latitude: '51.5074',
-        bloodPressure: 125,
-        alcoholLevel: 0.01,
+        bloodPressure: 0, // No data
+        alcoholLevel: 0, // No data
+        bloodPressureDisplay: getHealthDisplayValue(0, 'bloodPressure', 'VH-003'),
+        alcoholLevelDisplay: getHealthDisplayValue(0, 'alcoholLevel', 'VH-003'),
+        alcoholLevelDisplay: getHealthDisplayValue(0, 'alcoholLevel'),
+        bloodPressureUnit: getHealthUnit(0, 'bloodPressure'),
+        alcoholLevelUnit: getHealthUnit(0, 'alcoholLevel'),
         lastCheck: '3 hours ago', 
         alerts: 0 
       }
@@ -680,39 +752,44 @@ const Dashboard = () => {
                 </div>
               </div>
               
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <LiveDataCard
-                  icon={Navigation}
-                  title="Longitude"
-                  value={thingSpeakData.longitude?.toFixed(4) || '0.0000'}
-                  unit="°"
-                  status="normal"
-                  color="blue"
-                />
-                <LiveDataCard
-                  icon={MapPin}
-                  title="Latitude"
-                  value={thingSpeakData.latitude?.toFixed(4) || '0.0000'}
-                  unit="°"
-                  status="normal"
-                  color="green"
-                />
-                <LiveDataCard
-                  icon={Heart}
-                  title="Blood Pressure"
-                  value={thingSpeakData.bloodPressure || '0'}
-                  unit="mmHg"
-                  status={getHealthStatus(thingSpeakData.bloodPressure, 'bloodPressure')}
-                  color="red"
-                />
-                <LiveDataCard
-                  icon={Droplet}
-                  title="Alcohol Level"
-                  value={thingSpeakData.alcoholLevel?.toFixed(3) || '0.000'}
-                  unit="%"
-                  status={getHealthStatus(thingSpeakData.alcoholLevel, 'alcoholLevel')}
-                  color="orange"
-                />
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                {/* Map takes up 2/3 of the space */}
+                <div className="lg:col-span-2">
+                  <div className="mb-4">
+                    <h4 className="text-md font-semibold text-gray-800 mb-2 flex items-center">
+                      <MapPin className="w-5 h-5 mr-2 text-green-600" />
+                      Vehicle Location
+                    </h4>
+                  </div>
+                  <LocationMap
+                    longitude={thingSpeakData.longitude}
+                    latitude={thingSpeakData.latitude}
+                    vehicleId="VH-001"
+                    driverName="John Smith"
+                    height="300px"
+                    className="w-full"
+                  />
+                </div>
+                
+                {/* Health data takes up 1/3 of the space */}
+                <div className="space-y-4">
+                  <LiveDataCard
+                    icon={Heart}
+                    title="Blood Pressure"
+                    value={getHealthDisplayValue(thingSpeakData.bloodPressure, 'bloodPressure')}
+                    unit={getHealthUnit(thingSpeakData.bloodPressure, 'bloodPressure')}
+                    status={getHealthStatus(thingSpeakData.bloodPressure, 'bloodPressure')}
+                    color="red"
+                  />
+                  <LiveDataCard
+                    icon={Droplet}
+                    title="Alcohol Level"
+                    value={getHealthDisplayValue(thingSpeakData.alcoholLevel, 'alcoholLevel')}
+                    unit={getHealthUnit(thingSpeakData.alcoholLevel, 'alcoholLevel')}
+                    status={getHealthStatus(thingSpeakData.alcoholLevel, 'alcoholLevel')}
+                    color="orange"
+                  />
+                </div>
               </div>
             </div>
 
@@ -786,7 +863,7 @@ const Dashboard = () => {
               </ChartCard>
 
               <ChartCard 
-                title="Health Monitoring"
+                title="Vehicle Overview"
                 actions={
                   <button className="p-2 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors duration-300">
                     <MoreVertical className="w-4 h-4 text-gray-600" />
@@ -794,13 +871,18 @@ const Dashboard = () => {
                 }
               >
                 <div className="text-center">
-                  <Activity className="w-16 h-16 text-red-500 mx-auto mb-4" />
-                  <div className="text-gray-500">Blood pressure & alcohol monitoring</div>
+                  <Car className="w-16 h-16 text-blue-500 mx-auto mb-4" />
+                  <div className="text-gray-500">Fleet status overview</div>
                   <div className="text-sm text-gray-400 mt-2">
-                    Current: {thingSpeakData.bloodPressure}mmHg, {thingSpeakData.alcoholLevel?.toFixed(3)}%
+                    {dashboardData.overview.totalVehicles} vehicles, {dashboardData.overview.activeDrivers} active
                   </div>
                 </div>
               </ChartCard>
+            </div>
+
+            {/* Health Monitoring Graph - Full Width Section */}
+            <div className="mt-6">
+              <HealthMonitoringChart thingSpeakData={thingSpeakData} />
             </div>
           </div>
         )}
@@ -834,7 +916,6 @@ const Dashboard = () => {
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Driver</th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Location</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">GPS Coordinates</th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Blood Pressure</th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Alcohol Level</th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Alerts</th>
@@ -850,6 +931,7 @@ const Dashboard = () => {
                         onViewVehicle={handleViewVehicle}
                         onEditVehicle={handleEditVehicle}
                         onShowMoreOptions={handleMoreOptions}
+                        onViewMap={handleViewMap}
                       />
                     ))}
                   </tbody>
@@ -957,8 +1039,15 @@ const Dashboard = () => {
               
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-500 mb-1">GPS Coordinates</label>
-                  <div className="text-lg text-gray-900">{selectedVehicle.longitude}, {selectedVehicle.latitude}</div>
+                  <label className="block text-sm font-medium text-gray-500 mb-3">Current Location</label>
+                  <LocationMap
+                    longitude={parseFloat(selectedVehicle.longitude)}
+                    latitude={parseFloat(selectedVehicle.latitude)}
+                    vehicleId={selectedVehicle.id}
+                    driverName={selectedVehicle.driver}
+                    height="250px"
+                    className="w-full"
+                  />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-500 mb-1">Blood Pressure</label>
@@ -1152,6 +1241,56 @@ const Dashboard = () => {
                 >
                   <XCircle className="w-5 h-5 text-red-600" />
                   <span className="text-red-600">Disable Vehicle</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Map Modal */}
+      {showMapModal && selectedVehicle && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-2xl p-6 max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-2xl font-bold text-gray-900">
+                Vehicle Location - {selectedVehicle.id}
+              </h2>
+              <button
+                onClick={() => setShowMapModal(false)}
+                className="p-2 rounded-lg bg-gray-100 hover:bg-gray-200 transition-colors duration-300"
+              >
+                <XCircle className="w-6 h-6 text-gray-600" />
+              </button>
+            </div>
+            
+            <div className="mb-4">
+              <div className="flex items-center space-x-4 mb-4">
+                <div className="flex items-center space-x-2">
+                  <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+                  <span className="font-medium text-gray-800">Driver: {selectedVehicle.driver}</span>
+                </div>
+                <div className="text-gray-600">Status: {selectedVehicle.status}</div>
+                <div className="text-gray-600">Location: {selectedVehicle.location}</div>
+              </div>
+            </div>
+            
+            <LocationMap
+              longitude={parseFloat(selectedVehicle.longitude)}
+              latitude={parseFloat(selectedVehicle.latitude)}
+              vehicleId={selectedVehicle.id}
+              driverName={selectedVehicle.driver}
+              height="500px"
+              className="w-full"
+            />
+            
+            <div className="mt-6 pt-6 border-t border-gray-200">
+              <div className="flex justify-end">
+                <button
+                  onClick={() => setShowMapModal(false)}
+                  className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-300"
+                >
+                  Close
                 </button>
               </div>
             </div>
