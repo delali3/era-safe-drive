@@ -16,9 +16,9 @@ import HealthMonitoringChart from '../components/HealthMonitoringChart';
 // Authentication Configuration
 const AUTH_CONFIG = {
   users: [
-    { email: 'admin@erasafedrive.com', password: 'admin123', name: 'System Administrator', role: 'admin' },
-    { email: 'manager@erasafedrive.com', password: 'manager123', name: 'Fleet Manager', role: 'manager' },
-    { email: 'operator@erasafedrive.com', password: 'operator123', name: 'Fleet Operator', role: 'operator' }
+    { email: 'admin@erasafedrive.com', password: 'admin123', name: 'Akosua Osei', role: 'admin' },
+    { email: 'manager@erasafedrive.com', password: 'manager123', name: 'Yaw Boateng', role: 'manager' },
+    { email: 'operator@erasafedrive.com', password: 'operator123', name: 'Efua Adjei', role: 'operator' }
   ]
 };
 
@@ -492,8 +492,8 @@ const Dashboard = () => {
         console.error('Failed to fetch ThingSpeak data');
         // Use sample data for demo
         setThingSpeakData({
-          longitude: -0.1278,
-          latitude: 51.5074,
+          longitude: -0.1870,
+          latitude: 5.5560,
           bloodPressure: 120,
           alcoholLevel: 0.02,
           lastUpdate: new Date()
@@ -503,8 +503,8 @@ const Dashboard = () => {
       console.error('Error fetching ThingSpeak data:', error);
       // Use sample data for demo
       setThingSpeakData({
-        longitude: -0.1278,
-        latitude: 51.5074,
+        longitude: -0.1870,
+        latitude: 5.5560,
         bloodPressure: 120,
         alcoholLevel: 0.02,
         lastUpdate: new Date()
@@ -667,11 +667,11 @@ const Dashboard = () => {
     vehicles: [
       { 
         id: 'VH-001', 
-        driver: 'John Smith', 
+        driver: 'Kwame Asante', 
         status: thingSpeakData.alcoholLevel > 0.05 ? 'violation' : 'active', 
-        location: 'Downtown',
-        longitude: thingSpeakData.longitude?.toFixed(4) || '0.0000',
-        latitude: thingSpeakData.latitude?.toFixed(4) || '0.0000',
+        location: 'Osu, Accra',
+        longitude: thingSpeakData.longitude?.toFixed(4) || '-0.1870',
+        latitude: thingSpeakData.latitude?.toFixed(4) || '5.5560',
         bloodPressure: thingSpeakData.bloodPressure || 0,
         alcoholLevel: thingSpeakData.alcoholLevel || 0,
         bloodPressureDisplay: getHealthDisplayValue(thingSpeakData.bloodPressure, 'bloodPressure', 'VH-001'),
@@ -683,11 +683,11 @@ const Dashboard = () => {
       },
       { 
         id: 'VH-002', 
-        driver: 'Sarah Johnson', 
+        driver: 'Ama Serwaa', 
         status: 'active', 
-        location: 'Airport',
-        longitude: '-0.4614',
-        latitude: '51.4700',
+        location: 'Kotoka Airport',
+        longitude: '-0.1658',
+        latitude: '5.6052',
         bloodPressure: 0, // No data
         alcoholLevel: 0, // No data
         bloodPressureDisplay: getHealthDisplayValue(0, 'bloodPressure', 'VH-002'),
@@ -699,16 +699,15 @@ const Dashboard = () => {
       },
       { 
         id: 'VH-003', 
-        driver: 'Mike Chen', 
+        driver: 'Kofi Mensah', 
         status: 'maintenance', 
-        location: 'Service Center',
-        longitude: '-0.0759',
-        latitude: '51.5074',
+        location: 'Tema Industrial Area',
+        longitude: '0.0165',
+        latitude: '5.6698',
         bloodPressure: 0, // No data
         alcoholLevel: 0, // No data
         bloodPressureDisplay: getHealthDisplayValue(0, 'bloodPressure', 'VH-003'),
         alcoholLevelDisplay: getHealthDisplayValue(0, 'alcoholLevel', 'VH-003'),
-        alcoholLevelDisplay: getHealthDisplayValue(0, 'alcoholLevel'),
         bloodPressureUnit: getHealthUnit(0, 'bloodPressure'),
         alcoholLevelUnit: getHealthUnit(0, 'alcoholLevel'),
         lastCheck: '3 hours ago', 
@@ -765,7 +764,7 @@ const Dashboard = () => {
                     longitude={thingSpeakData.longitude}
                     latitude={thingSpeakData.latitude}
                     vehicleId="VH-001"
-                    driverName="John Smith"
+                    driverName="Kwame Asante"
                     height="300px"
                     className="w-full"
                   />
