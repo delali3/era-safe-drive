@@ -199,7 +199,7 @@ const Header = ({ activeTab, setActiveTab, searchTerm, setSearchTerm, handleRefr
             </h1>
           </div>
           <nav className="hidden md:flex space-x-1">
-            {['overview', 'vehicles', 'drivers', 'reports', 'alerts'].map((tab) => (
+            {['overview', 'vehicles', 'reports', 'alerts'].map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
@@ -995,6 +995,347 @@ const Dashboard = () => {
                     </div>
                   </div>
                 )}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Reports Tab */}
+        {activeTab === 'reports' && (
+          <div className="space-y-6">
+            <div className="flex items-center justify-between">
+              <h2 className="text-2xl font-bold text-gray-900">Reports & Analytics</h2>
+              <div className="flex items-center space-x-4">
+                <select className="px-4 py-2 border border-gray-300 rounded-lg focus:border-green-500 focus:ring-2 focus:ring-green-500/20">
+                  <option value="daily">Daily Report</option>
+                  <option value="weekly">Weekly Report</option>
+                  <option value="monthly">Monthly Report</option>
+                  <option value="custom">Custom Range</option>
+                </select>
+                <button 
+                  onClick={handleExportReport}
+                  className="flex items-center space-x-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors duration-300"
+                >
+                  <Download className="w-4 h-4" />
+                  <span>Export Report</span>
+                </button>
+              </div>
+            </div>
+
+            {/* Report Summary Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              <div className="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-gray-600">Total Violations</p>
+                    <p className="text-3xl font-bold text-red-600">12</p>
+                    <p className="text-sm text-red-500 mt-1">↑ 8% from last week</p>
+                  </div>
+                  <div className="p-3 bg-red-50 rounded-full">
+                    <AlertTriangle className="w-6 h-6 text-red-600" />
+                  </div>
+                </div>
+              </div>
+              
+              <div className="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-gray-600">Alcohol Violations</p>
+                    <p className="text-3xl font-bold text-orange-600">8</p>
+                    <p className="text-sm text-orange-500 mt-1">↑ 12% from last week</p>
+                  </div>
+                  <div className="p-3 bg-orange-50 rounded-full">
+                    <Droplet className="w-6 h-6 text-orange-600" />
+                  </div>
+                </div>
+              </div>
+              
+              <div className="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-gray-600">Health Alerts</p>
+                    <p className="text-3xl font-bold text-yellow-600">4</p>
+                    <p className="text-sm text-green-500 mt-1">↓ 5% from last week</p>
+                  </div>
+                  <div className="p-3 bg-yellow-50 rounded-full">
+                    <Heart className="w-6 h-6 text-yellow-600" />
+                  </div>
+                </div>
+              </div>
+              
+              <div className="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-gray-600">Safe Trips</p>
+                    <p className="text-3xl font-bold text-green-600">234</p>
+                    <p className="text-sm text-green-500 mt-1">↑ 15% from last week</p>
+                  </div>
+                  <div className="p-3 bg-green-50 rounded-full">
+                    <CheckCircle className="w-6 h-6 text-green-600" />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Violation Trends Chart */}
+            <div className="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-lg font-semibold text-gray-900">Violation Trends</h3>
+                <div className="flex items-center space-x-4">
+                  <div className="flex items-center space-x-2">
+                    <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+                    <span className="text-sm text-gray-600">Alcohol Violations</span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                    <span className="text-sm text-gray-600">Health Alerts</span>
+                  </div>
+                </div>
+              </div>
+              
+              {/* Simple Chart Visualization */}
+              <div className="relative h-64">
+                <div className="absolute inset-0 flex items-end justify-between space-x-2">
+                  {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((day, index) => (
+                    <div key={day} className="flex-1 flex flex-col items-center space-y-1">
+                      <div className="relative w-full max-w-12">
+                        <div 
+                          className="bg-red-500 rounded-t transition-all duration-500"
+                          style={{ height: `${Math.random() * 80 + 20}px` }}
+                        ></div>
+                        <div 
+                          className="bg-yellow-500 rounded-t -mt-1"
+                          style={{ height: `${Math.random() * 60 + 10}px` }}
+                        ></div>
+                      </div>
+                      <span className="text-xs text-gray-600">{day}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Vehicle Performance Report */}
+            <div className="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-lg font-semibold text-gray-900">Vehicle Performance Report</h3>
+                <div className="flex items-center space-x-2">
+                  <Search className="w-4 h-4 text-gray-400" />
+                  <input
+                    type="text"
+                    placeholder="Search vehicles..."
+                    className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:border-green-500 focus:ring-2 focus:ring-green-500/20"
+                  />
+                </div>
+              </div>
+              
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead className="bg-gray-50">
+                    <tr>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Vehicle ID</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Driver</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total Trips</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Safe Trips</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Violations</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Safety Score</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-200">
+                    {dashboardData.vehicles.map((vehicle) => {
+                      const totalTrips = Math.floor(Math.random() * 50) + 20;
+                      const violations = Math.floor(Math.random() * 5);
+                      const safeTrips = totalTrips - violations;
+                      const safetyScore = Math.round((safeTrips / totalTrips) * 100);
+                      
+                      return (
+                        <tr key={vehicle.id} className="hover:bg-gray-50">
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <div className="text-sm font-medium text-gray-900">{vehicle.id}</div>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <div className="text-sm text-gray-900">{vehicle.driver}</div>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <div className="text-sm text-gray-900">{totalTrips}</div>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <div className="text-sm text-green-600 font-medium">{safeTrips}</div>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <div className={`text-sm font-medium ${violations > 3 ? 'text-red-600' : violations > 1 ? 'text-yellow-600' : 'text-green-600'}`}>
+                              {violations}
+                            </div>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <div className="flex items-center space-x-2">
+                              <div className="w-16 bg-gray-200 rounded-full h-2">
+                                <div 
+                                  className={`h-2 rounded-full transition-all duration-500 ${
+                                    safetyScore >= 90 ? 'bg-green-500' : 
+                                    safetyScore >= 70 ? 'bg-yellow-500' : 'bg-red-500'
+                                  }`}
+                                  style={{ width: `${safetyScore}%` }}
+                                ></div>
+                              </div>
+                              <span className={`text-sm font-medium ${
+                                safetyScore >= 90 ? 'text-green-600' : 
+                                safetyScore >= 70 ? 'text-yellow-600' : 'text-red-600'
+                              }`}>
+                                {safetyScore}%
+                              </span>
+                            </div>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <div className="flex items-center space-x-2">
+                              <button
+                                onClick={() => alert(`Generating detailed report for ${vehicle.id}...`)}
+                                className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors duration-300"
+                                title="Generate Report"
+                              >
+                                <Download className="w-4 h-4" />
+                              </button>
+                              <button
+                                onClick={() => handleViewVehicle(vehicle)}
+                                className="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors duration-300"
+                                title="View Details"
+                              >
+                                <Eye className="w-4 h-4" />
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Recent Violations Report */}
+            <div className="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-lg font-semibold text-gray-900">Recent Violations</h3>
+                <button className="text-sm text-green-600 hover:text-green-700 font-medium">
+                  View All →
+                </button>
+              </div>
+              
+              <div className="space-y-4">
+                {[
+                  { 
+                    id: 'VH-001', 
+                    driver: 'John Smith', 
+                    type: 'Alcohol Violation', 
+                    level: '0.072% BAC', 
+                    time: '2 hours ago', 
+                    severity: 'critical',
+                    location: 'Downtown Route 1'
+                  },
+                  { 
+                    id: 'VH-003', 
+                    driver: 'Emily Davis', 
+                    type: 'High Blood Pressure', 
+                    level: '165 mmHg', 
+                    time: '4 hours ago', 
+                    severity: 'warning',
+                    location: 'Highway 45'
+                  },
+                  { 
+                    id: 'VH-005', 
+                    driver: 'Michael Brown', 
+                    type: 'Alcohol Violation', 
+                    level: '0.058% BAC', 
+                    time: '6 hours ago', 
+                    severity: 'critical',
+                    location: 'Industrial Zone'
+                  },
+                  { 
+                    id: 'VH-002', 
+                    driver: 'Sarah Johnson', 
+                    type: 'Health Alert', 
+                    level: '148 mmHg', 
+                    time: '8 hours ago', 
+                    severity: 'warning',
+                    location: 'City Center'
+                  }
+                ].map((violation, index) => (
+                  <div key={index} className={`flex items-start space-x-4 p-4 rounded-xl border ${
+                    violation.severity === 'critical' 
+                      ? 'bg-red-50 border-red-200' 
+                      : 'bg-yellow-50 border-yellow-200'
+                  }`}>
+                    <div className={`p-2 rounded-full ${
+                      violation.severity === 'critical' ? 'bg-red-100' : 'bg-yellow-100'
+                    }`}>
+                      {violation.type.includes('Alcohol') ? (
+                        <Droplet className={`w-5 h-5 ${
+                          violation.severity === 'critical' ? 'text-red-600' : 'text-yellow-600'
+                        }`} />
+                      ) : (
+                        <Heart className={`w-5 h-5 ${
+                          violation.severity === 'critical' ? 'text-red-600' : 'text-yellow-600'
+                        }`} />
+                      )}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center justify-between">
+                        <h4 className={`font-medium ${
+                          violation.severity === 'critical' ? 'text-red-900' : 'text-yellow-900'
+                        }`}>
+                          {violation.type}
+                        </h4>
+                        <span className="text-xs text-gray-500">{violation.time}</span>
+                      </div>
+                      <p className={`text-sm mt-1 ${
+                        violation.severity === 'critical' ? 'text-red-700' : 'text-yellow-700'
+                      }`}>
+                        Vehicle {violation.id} - {violation.driver}
+                      </p>
+                      <div className="flex items-center justify-between mt-2">
+                        <div className="flex items-center space-x-4 text-xs text-gray-600">
+                          <span>Level: {violation.level}</span>
+                          <span>Location: {violation.location}</span>
+                        </div>
+                        <button 
+                          onClick={() => alert(`Viewing details for violation on ${violation.id}...`)}
+                          className="text-xs text-blue-600 hover:text-blue-700 font-medium"
+                        >
+                          View Details
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Export Options */}
+            <div className="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">Export Options</h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <button
+                  onClick={() => alert('Exporting comprehensive report...')}
+                  className="flex items-center justify-center space-x-2 p-4 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors duration-300"
+                >
+                  <Download className="w-5 h-5 text-gray-600" />
+                  <span className="font-medium text-gray-900">Full Report (PDF)</span>
+                </button>
+                <button
+                  onClick={() => alert('Exporting violation data...')}
+                  className="flex items-center justify-center space-x-2 p-4 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors duration-300"
+                >
+                  <Download className="w-5 h-5 text-gray-600" />
+                  <span className="font-medium text-gray-900">Violations (CSV)</span>
+                </button>
+                <button
+                  onClick={() => alert('Exporting vehicle performance...')}
+                  className="flex items-center justify-center space-x-2 p-4 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors duration-300"
+                >
+                  <Download className="w-5 h-5 text-gray-600" />
+                  <span className="font-medium text-gray-900">Performance (Excel)</span>
+                </button>
               </div>
             </div>
           </div>
