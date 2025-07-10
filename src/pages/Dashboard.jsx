@@ -199,10 +199,17 @@ const Header = ({ activeTab, setActiveTab, searchTerm, setSearchTerm, handleRefr
             </h1>
           </div>
           <nav className="hidden md:flex space-x-1">
-            {['overview', 'vehicles', 'reports', 'alerts'].map((tab) => (
+            {['overview', 'vehicles', 'reports', 'alerts', 'awareness'].map((tab) => (
               <button
                 key={tab}
-                onClick={() => setActiveTab(tab)}
+                onClick={() => {
+                  if (tab === 'awareness') {
+                    // Redirect to awareness page
+                    window.location.href = '/awareness';
+                  } else {
+                    setActiveTab(tab);
+                  }
+                }}
                 className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 ${
                   activeTab === tab
                     ? 'bg-green-50 text-green-600'
@@ -492,8 +499,8 @@ const Dashboard = () => {
         console.error('Failed to fetch ThingSpeak data');
         // Use sample data for demo
         setThingSpeakData({
-          longitude: -0.1870,
-          latitude: 5.5560,
+          longitude: -1.716975,
+          latitude: 4.959667,
           bloodPressure: 120,
           alcoholLevel: 0.02,
           lastUpdate: new Date()
@@ -503,8 +510,8 @@ const Dashboard = () => {
       console.error('Error fetching ThingSpeak data:', error);
       // Use sample data for demo
       setThingSpeakData({
-        longitude: -0.1870,
-        latitude: 5.5560,
+        longitude: -1.716975,
+        latitude: 4.959667,
         bloodPressure: 120,
         alcoholLevel: 0.02,
         lastUpdate: new Date()
@@ -670,8 +677,8 @@ const Dashboard = () => {
         driver: 'Kwame Asante', 
         status: thingSpeakData.alcoholLevel > 0.05 ? 'violation' : 'active', 
         location: 'Osu, Accra',
-        longitude: thingSpeakData.longitude?.toFixed(4) || '-0.1870',
-        latitude: thingSpeakData.latitude?.toFixed(4) || '5.5560',
+        longitude: thingSpeakData.longitude?.toFixed(4) || '-1.7170',
+        latitude: thingSpeakData.latitude?.toFixed(4) || '4.9597',
         bloodPressure: thingSpeakData.bloodPressure || 0,
         alcoholLevel: thingSpeakData.alcoholLevel || 0,
         bloodPressureDisplay: getHealthDisplayValue(thingSpeakData.bloodPressure, 'bloodPressure', 'VH-001'),
@@ -686,8 +693,8 @@ const Dashboard = () => {
         driver: 'Ama Serwaa', 
         status: 'active', 
         location: 'Kotoka Airport',
-        longitude: '-0.1658',
-        latitude: '5.6052',
+        longitude: '-1.7050',
+        latitude: '4.9720',
         bloodPressure: 0, // No data
         alcoholLevel: 0, // No data
         bloodPressureDisplay: getHealthDisplayValue(0, 'bloodPressure', 'VH-002'),
@@ -702,8 +709,8 @@ const Dashboard = () => {
         driver: 'Kofi Mensah', 
         status: 'maintenance', 
         location: 'Tema Industrial Area',
-        longitude: '0.0165',
-        latitude: '5.6698',
+        longitude: '-1.7300',
+        latitude: '4.9450',
         bloodPressure: 0, // No data
         alcoholLevel: 0, // No data
         bloodPressureDisplay: getHealthDisplayValue(0, 'bloodPressure', 'VH-003'),
