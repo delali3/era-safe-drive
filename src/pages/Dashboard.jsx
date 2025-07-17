@@ -1232,7 +1232,7 @@ const Dashboard = () => {
                 {[
                   { 
                     id: 'VH-001', 
-                    driver: 'John Smith', 
+                    driver: 'Kwame Asante', 
                     type: 'Alcohol Violation', 
                     level: '0.072% BAC', 
                     time: '2 hours ago', 
@@ -1241,7 +1241,7 @@ const Dashboard = () => {
                   },
                   { 
                     id: 'VH-003', 
-                    driver: 'Emily Davis', 
+                    driver: 'Ama Serwaa', 
                     type: 'High Blood Pressure', 
                     level: '165 mmHg', 
                     time: '4 hours ago', 
@@ -1250,7 +1250,7 @@ const Dashboard = () => {
                   },
                   { 
                     id: 'VH-005', 
-                    driver: 'Michael Brown', 
+                    driver: 'Kofi Mensah', 
                     type: 'Alcohol Violation', 
                     level: '0.058% BAC', 
                     time: '6 hours ago', 
@@ -1259,7 +1259,7 @@ const Dashboard = () => {
                   },
                   { 
                     id: 'VH-002', 
-                    driver: 'Sarah Johnson', 
+                    driver: 'Kwaku Osei', 
                     type: 'Health Alert', 
                     level: '148 mmHg', 
                     time: '8 hours ago', 
