@@ -35,8 +35,8 @@ const LocationMap = ({
   const safeLatitude = latitude != null ? parseFloat(latitude) : 0;
   // 
   // Default to London if coordinates are invalid or null
-  const validLat = isNaN(safeLatitude) || safeLatitude === 0 ? 6.4576365 : safeLatitude;
-  const validLng = isNaN(safeLongitude) || safeLongitude === 0 ? -2.311415 : safeLongitude;
+  const validLat = isNaN(safeLatitude) || safeLatitude === 0 ? 4.95097 : safeLatitude;
+  const validLng = isNaN(safeLongitude) || safeLongitude === 0 ? -1.72069 : safeLongitude;
 
   return (
     <div className={`relative rounded-xl overflow-hidden border border-gray-200 shadow-sm ${className}`} style={{ height }}>

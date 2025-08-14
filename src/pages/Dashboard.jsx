@@ -510,8 +510,8 @@ const Dashboard = () => {
       console.error('Error fetching ThingSpeak data:', error);
       // Use sample data for demo
       setThingSpeakData({
-        longitude: -1.716975,
-        latitude: 4.959667,
+        longitude: -1.72069,
+        latitude: 4.95097,
         bloodPressure: 120,
         alcoholLevel: 0.02,
         lastUpdate: new Date()
